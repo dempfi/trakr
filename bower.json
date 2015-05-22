@@ -1,0 +1,14 @@
+{
+  "name": "trakr",
+  "version": "0.0.1",
+  "main": "public/app.js",
+  "dependencies": {
+    "react": "~0.13.3",
+    "lodash": "~3.8.0",
+    "immutable": "~3.7.2",
+    "reflux": "~0.2.7",
+    "moment": "~2.10.3",
+    "react-router": "~0.13.3"
+  },
+  "overrides": {}
+}

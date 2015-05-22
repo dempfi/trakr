@@ -1,0 +1,20 @@
+/node_modules
+/bower_components
+
+### Node template
+# Logs
+logs
+*.log
+npm-debug.log.*
+# Runtime data
+pids
+*.pid
+*.seed
+
+### OSX template
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*

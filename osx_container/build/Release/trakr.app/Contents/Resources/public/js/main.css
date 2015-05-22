@@ -1,0 +1,883 @@
+/*! normalize.css v3.0.2 | MIT License | github.com/necolas/normalize.css */
+
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/**
+ * Remove default margin.
+ */
+
+body {
+  margin: 0;
+}
+
+/* HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11
+ * and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
+
+audio,
+canvas,
+progress,
+video {
+  display: inline-block; /* 1 */
+  vertical-align: baseline; /* 2 */
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
+
+[hidden],
+template {
+  display: none;
+}
+
+/* Links
+   ========================================================================== */
+
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
+
+a {
+  background-color: transparent;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
+
+b,
+strong {
+  font-weight: bold;
+}
+
+/**
+ * Address styling not present in Safari and Chrome.
+ */
+
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari, and Chrome.
+ */
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/**
+ * Address styling not present in IE 8/9.
+ */
+
+mark {
+  background: #ff0;
+  color: #000;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Remove border when inside `a` element in IE 8/9/10.
+ */
+
+img {
+  border: 0;
+}
+
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
+
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ */
+
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+/**
+ * Contain overflow in all browsers.
+ */
+
+pre {
+  overflow: auto;
+}
+
+/**
+ * Address odd `em`-unit font size rendering in all browsers.
+ */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+
+/**
+ * 1. Correct color not being inherited.
+ *    Known issue: affects color of disabled elements.
+ * 2. Correct font properties not being inherited.
+ * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit; /* 1 */
+  font: inherit; /* 2 */
+  margin: 0; /* 3 */
+}
+
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+
+button {
+  overflow: visible;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+
+button,
+select {
+  text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* 2 */
+  cursor: pointer; /* 3 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+input {
+  line-height: normal;
+}
+
+/**
+ * It's recommended that you don't attempt to style these elements.
+ * Firefox's implementation doesn't respect box-sizing, padding, or width.
+ *
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+  -webkit-appearance: textfield; /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; /* 2 */
+  box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+
+legend {
+  border: 0; /* 1 */
+  padding: 0; /* 2 */
+}
+
+/**
+ * Remove default vertical scrollbar in IE 8/9/10/11.
+ */
+
+textarea {
+  overflow: auto;
+}
+
+/**
+ * Don't inherit the `font-weight` (applied by a rule above).
+ * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ */
+
+optgroup {
+  font-weight: bold;
+}
+
+/* Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+}
+
+html {
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+body {
+    background : white;
+    font-family: 'Helvetica Neue';
+}
+* {
+    box-sizing: border-box;
+    cursor: default;
+    text-rendering: optimizeLegibility;
+}
+*:not(input, textarea) {
+    -webkit-user-select: none;
+}
+
+
+/*---*/
+/*header*/
+header {
+    position   : fixed;
+    left       : 0;
+    top        : 0;
+    width      : 100%;
+    height     : 40px;
+    z-index    : 100;
+    text-align : center;
+    background: #FFFFFF;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.10), 0 1px 0 0 rgba(0,0,0,0.10);
+}
+
+header .divider {
+    position   : absolute;
+    right      : 37px;
+    top        : 10px;
+    height     : 20px;
+    width      : 1px;
+    background : #E6E6E6;
+}
+
+header .add-task {
+    background : url('../img/add.svg');
+    height     : 17px;
+    width      : 17px;
+    position   : absolute;
+    right      : 10px;
+    top        : 11px;
+    cursor     : pointer;
+}
+
+header .close {
+    background : url('../img/close.svg');
+    height     : 21px;
+    width      : 21px;
+    position   : absolute;
+    right      : 9px;
+    top        : 10px;
+    cursor     : pointer;
+}
+header .close:hover {
+    background : url('../img/close-hover.svg');
+}
+header .close:active {
+    background : url('../img/close-active.svg');
+}
+
+header .title {
+    color      : #FF5151;
+    display     : inline-block;
+    font-size   : 13px;
+    line-height : 15px;
+    margin-top  : 13px;
+}
+
+header .edit {
+    background : url('../img/edit.svg');
+    height     : 18px;
+    width      : 18px;
+    position   : absolute;
+    right      : 9px;
+    top        : 10px;
+    cursor     : pointer;
+}
+
+header .back {
+    background : url('../img/back.svg');
+    height     : 20px;
+    width      : 20px;
+    position   : absolute;
+    left       : 69px;
+    top        : 10px;
+    cursor     : pointer;
+}
+header .back:hover {
+    background : url('../img/back-hover.svg');
+}
+header .back:active {
+    background : url('../img/back-active.svg');
+}
+
+/*header end*/
+/*---*/
+
+
+
+
+/*---*/
+/* new-task */
+/*floating label input*/
+.new-task form {
+    position      : absolute;
+    left          : 0;
+    top           : 40px;
+    padding       : 0 10px;
+    width         : 100%;
+}
+.new-task form .input {
+    width         : 100%;
+    height        : 40px;
+    position      : relative;
+}
+.new-task form .input input {
+    position      : absolute;
+    left          : 0;
+    top           : 0;
+    height        : 100%;
+    width         : 100%;
+    border        : none;
+    box-shadow    : 0px 1px 0px 0px #E6E6E6;
+    font-size     : 13px;
+    color         : #FF5151;
+    padding-top   : 18px;
+    padding-bottom: 7px;
+    background    : transparent;
+    outline       : none;
+}
+.new-task form .input input:focus {
+    box-shadow    : 0px 1px 0px 0px #FF5151;
+}
+.new-task form .input input:focus + label,
+.new-task form .input input:valid + label {
+    top         : 5px;
+    font-size   : 11px;
+    /*line-height : 12px;*/
+}
+.new-task form .input label {
+    position    : absolute;
+    left        : 0;
+    top         : 13px;
+    height      : 15px;
+    width       : 100%;
+    color       : rgba(106,130,153,0.50);
+    font-size   : 13px;
+    transition  : 0.15s;
+}
+
+/*half of width input styles*/
+.new-task form .input.-half {
+    width: 50%;
+    float: left;
+}
+.new-task form .input.-half:last-child:after{
+    content    : '';
+    position   : absolute;
+    left       : 0;
+    top        : 5px;
+    background : #E6E6E6;
+    width      : 1px;
+    height     : 30px;
+}
+.new-task form .input.-half:last-child input{
+    padding-left: 10px;
+}
+.new-task form .input.-half:last-child label{
+    left: 10px;
+}
+/*floating label input end*/
+
+
+.new-task .add-task-btn {
+    position    : absolute;
+    left        : 10px;
+    bottom      : 0;
+    right       : 10px;
+    height      : 40px;
+    font-size   : 13px;
+    color       : #FF5151;
+    box-shadow  : 0 -1px 0 0 #E6E6E6;
+    text-align  : center;
+    line-height : 40px;
+    cursor      : pointer;
+}
+/* new-task end*/
+/*---*/
+
+
+
+
+
+/*---*/
+/* main-list */
+.tasks-list {
+    position    : fixed;
+    top         : 10px;
+    left        : 0;
+    bottom      : 0;
+    right       : 0;
+    overflow    : auto;
+}
+
+.tasks-list > div:after {
+    position    : absolute;
+    left        : 10px;
+    bottom      : 0;
+    right       : 0;
+    height      : 1px;
+    background  : #E6E6E6;
+    content     : '';
+}
+
+.tasks-list .day-title {
+    width       : 100%;
+    height      : 30px;
+    color       : #FF5151;
+    font-size   : 13px;
+    text-align  : center;
+    line-height : 15px;
+    padding-top : 8px;
+    position    : relative;
+}
+
+.tasks-list .task {
+    width       : 100%;
+    height      : 50px;
+    position    : relative;
+    font-size   : 13px;
+}
+
+/* dots*/
+.tasks-list .task .task-dots {
+    position      : absolute;
+    left          : 11px;
+    top           : 33px;
+    width         : 30px;
+    height        : 2px;
+}
+
+.tasks-list .task .task-dots span {
+    width         : 3px;
+    height        : 3px;
+    border-radius : 100%;
+    background    : rgba(107,130,153,0.30);
+    display       : block;
+    float         : left;
+    margin-right  : 6px;
+}
+.tasks-list .task .task-dots span.active-dot {
+    background    : #435469;
+}
+
+.tasks-list .task .task-dots span:last-child {
+    margin: 0;
+}
+/* dots end*/
+
+
+.tasks-list .task .task-time,
+.tasks-list .task .task-title {
+    position    : absolute;
+    left        : 10px;
+    color       : #435469;
+    top         : 11px;
+    line-height : 16px;
+}
+
+.tasks-list .task .task-title {
+    left        : 60px;
+}
+
+.tasks-list .task .task-project {
+    position    : absolute;
+    left        : 60px;
+    top         : 27px;
+    color       : #6B8299;
+    font-size   : 12px;
+}
+
+/*task actions*/
+.tasks-list .task .task-actions {
+    position     : absolute;
+    left         : 0;
+    height       : 52px;
+    width        : 55px;
+    top          : -1px;
+    z-index      : 2;
+    overflow     : hidden;
+}
+
+.task-actions-cube {
+    position                : absolute;
+    left                    : 0;
+    height                  : 100%;
+    width                   : 50px;
+    top                     : 0;
+    transition              : transform .2s ease;
+    transform-style         : preserve-3d;
+    -webkit-transition      : -webkit-transform .2s;
+    -webkit-transform-style : preserve-3d;
+}
+
+.task-actions-front,
+.task-actions-left {
+    position                : absolute;
+    left                    : 0;
+    top                     : -1px;
+    height                  : 100%;
+    width                   : 50px;
+    transform               : translateZ(25px);
+    -webkit-transform       : translateZ(25px);
+}
+.task-actions-left {
+    transform               : rotateY(-90deg) translateZ(25px);
+    -webkit-transform       : rotateY(-90deg) translateZ(25px);
+}
+
+.tasks-list .task .task-actions:hover .task-actions-cube {
+    transform         : translateZ(-25px) rotateY(90deg);
+    -webkit-transform : translateZ(-25px) rotateY(90deg);
+}
+
+.tasks-list .task .task-start,
+.tasks-list .task .task-stop {
+    position     : absolute;
+    left         : 0;
+    height       : 100%;
+    background   : #6FBA23;
+    color        : white;
+    font-size    : 14px;
+    padding-left : 10px;
+    padding-top  : 17px;
+    line-height  : 16px;
+    width        : 50px;
+}
+.tasks-list .task .task-stop {
+    z-index      : 2;
+    background   : #FF5151;
+    display      : none;
+}
+/*task actions end*/
+
+/*active task*/
+.tasks-list .task.-active .task-time {
+    color       : #FF5151;
+}
+.tasks-list .task.-active .task-dots span.active-dot {
+    background  : #FF5151;
+}
+.tasks-list .task.-active .task-stop {
+    display: block;
+}
+/*active task end*/
+
+
+/* main-list end */
+/*---*/
+
+
+/*---*/
+/*task screen*/
+.task-screen .counter {
+    position    : absolute;
+    left        : 0;
+    top         : 40px;
+    height      : 90px;
+    width       : 100%;
+}
+.task-screen .counter:after {
+    content     : '';
+    position    : absolute;
+    left        : 10px;
+    bottom      : 0;
+    right       : 0;
+    height      : 1px;
+    background  : #E6E6E6;
+}
+.task-screen .counter > div {
+    position    : absolute;
+    left        : 41px;
+    top         : 26px;
+    font-size   : 30px;
+    font-weight : 200;
+    color       : #FF5151;
+}
+.task-screen .counter > div.earned {
+    left        : 179px;
+    color       : #6FBA23;
+}
+.task-screen .counter > div .small {
+    font-size   : 20px;
+}
+.task-screen .counter > div .description {
+    position    : absolute;
+    left        : 2px;
+    top         : 29px;
+    font-size   : 11px;
+    color       : rgba(106,130,153,0.50);
+    line-height : 12px;
+    font-weight : 400;
+}
+.task-screen .counter > div .currency {
+    font-size   : 28px;
+}
+
+.task-screen .timeslots {
+    position  : absolute;
+    left      : 0;
+    top       : 130px;
+    overflow  : auto;
+    bottom    : 0;
+    width     : 100%;
+}
+.task-screen .timeslots .timeslot {
+    width     : 100%;
+    height    : 40px;
+    font-size : 13px;
+    position  : relative;
+}
+.task-screen .timeslots .timeslot:after {
+    content     : '';
+    position    : absolute;
+    left        : 10px;
+    bottom      : 0;
+    right       : 0;
+    height      : 1px;
+    background  : #E6E6E6;
+}
+.task-screen .timeslots .timeslot .worked-time,
+.task-screen .timeslots .timeslot .date,
+.task-screen .timeslots .timeslot .earned {
+    position  : absolute;
+    left      : 10px;
+    color     : #435469;
+    top       : 13px;
+}
+.task-screen .timeslots .timeslot .date {
+    left      : 60px;
+    color     : #6B8299;
+}
+.task-screen .timeslots .timeslot .earned {
+    left      : auto;
+    right     : 10px;
+    color     : #6B8299;
+}
+/*task screen end*/
+/*---*/

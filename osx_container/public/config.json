@@ -1,0 +1,29 @@
+{
+    "main": "public/index.html",
+    "name": "MacGap",
+    "description": "",
+    "version": "2.0.0",
+    "plugins" : {
+        "Dock":"Dock",
+        "Dialog":"Dialog",
+        "Fonts" : "Fonts",
+        "Clipboard":"Clipboard",
+        "StatusItem":"StatusItem",
+        "Task" : "Task",
+        "Sound" : "Sound",
+        "Defaults" : "Defaults",
+        "File" : "File"
+    },
+    "window" : {
+        "title" : "",
+        "width" : 320,
+        "height" : 500,
+        "position": "center",
+        "min_width": 320,
+        "min_height": 500,
+        "max_width": 320,
+        "max_height": 500,
+        "opaque": 1,
+        "alpha": 1
+    }
+}
