@@ -10,5 +10,11 @@
     "moment": "~2.10.3",
     "react-router": "~0.13.3"
   },
-  "overrides": {}
+  "overrides": {
+    "react-router": {
+      "dependencies": {
+        "react": "*"
+      }
+    }
+  }
 }

@@ -8,6 +8,6 @@ module.exports = React.createClass
     tasks = @state.tasks
     return (
       <div className='timeline'>
-        {tasks.map (task) -> <TaskItem key={task.get('id')} task={task}/>}
+        {tasks?.map (task) -> <TaskItem key={task.get('id')} task={task}/>}
       </div>
     )

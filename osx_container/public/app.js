@@ -114,23 +114,17 @@ module.exports = Reflux.createActions(['addTask']);
 });
 
 ;require.register("app", function(exports, require, module) {
-var NewTask, Timeline, Trakr, render;
-
-Timeline = require('layouts/timeline');
-
-NewTask = require('layouts/new-task');
-
-Trakr = React.createClass({
+module.exports = React.createClass({
   render: function() {
-    return React.createElement(NewTask, null);
+    return React.createElement("div", {
+      "className": 'APP'
+    }, React.createElement(ReactRouter.Link, {
+      "to": 'timeline'
+    }, "timeline"), React.createElement(ReactRouter.Link, {
+      "to": 'new'
+    }, "new task"), React.createElement(ReactRouter.RouteHandler, null));
   }
 });
-
-render = function() {
-  return React.render(React.createElement(Trakr, null), document.body);
-};
-
-render();
 });
 
 ;require.register("components/taskItem", function(exports, require, module) {
@@ -199,102 +193,41 @@ module.exports = React.createClass({
   render: function() {
     var tasks;
     tasks = this.state.tasks;
+    console.log(tasks = this.state.tasks);
     return React.createElement("div", {
       "className": 'timeline'
-    }, tasks.map(function(task) {
+    }, tasks != null ? tasks.map(function(task) {
       return React.createElement(TaskItem, {
         "key": task.get('id'),
         "task": task
       });
-    }));
+    }) : void 0);
   }
 });
 });
 
 ;require.register("router", function(exports, require, module) {
-var ActiveTask, MainList, NewTask, Router, TaskScreen, TasksList, Utils, app;
+var App, NewTask, Timeline, routes;
 
-app = window.app || {};
+App = require('app');
 
-Utils = app.Utils;
+Timeline = require('layouts/timeline');
 
-TasksList = app.TasksList;
+NewTask = require('layouts/new-task');
 
-ActiveTask = app.ActiveTask;
+routes = React.createElement(ReactRouter.Route, {
+  "handler": App
+}, React.createElement(ReactRouter.Route, {
+  "name": 'new',
+  "handler": NewTask
+}), React.createElement(ReactRouter.Route, {
+  "name": 'timeline',
+  "handler": Timeline
+}));
 
-MainList = require('layouts/timeline');
-
-NewTask = app.NewTask;
-
-TaskScreen = app.TaskScreen;
-
-module.exports = Router = (function() {
-  function Router(start) {
-    this.route = this.routes[start];
-  }
-
-  Router.prototype.onChanges = [];
-
-  Router.prototype.routes = {
-    newTask: function(self) {
-      return React.createElement(NewTask, {
-        "model": self.props.model
-      });
-    },
-    tasksList: function(self) {
-      return React.createElement(MainList, {
-        "model": self.props.model
-      });
-    },
-    taskScreen: function(self) {
-      var task;
-      task = _.find(self.props.model.tasks, {
-        id: this.args
-      });
-      return React.createElement(TaskScreen, {
-        "task": task,
-        "model": self.props.model
-      });
-    },
-    activeScreen: function(self) {
-      var activeTask;
-      activeTask = _.find(self.props.model.tasks, {
-        isActive: true
-      });
-      if (activeTask) {
-        return React.createElement(ActiveTask, {
-          "task": activeTask
-        });
-      }
-    }
-  };
-
-  Router.prototype.subscribe = function(onChange) {
-    return this.onChanges.push(onChange);
-  };
-
-  Router.prototype.inform = function() {
-    return this.onChanges.forEach(function(cb) {
-      return cb();
-    });
-  };
-
-  Router.prototype.navigate = function(route, args) {
-    if (route === 'back') {
-      this.route = this.prevRoute;
-      this.args = this.prevArgs;
-    } else {
-      this.prevRoute = this.route;
-      this.prevArgs = this.args;
-      this.args = args;
-      this.route = this.routes[route];
-    }
-    return this.inform();
-  };
-
-  return Router;
-
-})();
+ReactRouter.run(routes, function(Trakr) {
+  return React.render(React.createElement(Trakr, null), document.body);
+});
 });
 
 ;require.register("store/tasks", function(exports, require, module) {
@@ -306,23 +239,15 @@ Utils = require('utils');
 
 module.exports = Reflux.createStore({
   listenables: [TasksActions],
-  getInitialState: function() {
-    return this.tasks = Immutable.fromJS([
-      {
-        id: Utils.uuid(),
-        title: 'some cool task',
-        rate: 45,
-        lastStart: moment().toISOString(),
-        project: Utils.uuid(),
-        timeslots: []
-      }
-    ]);
-  },
   updateTasks: function(tasks) {
     this.tasks = tasks;
+    console.log(this.tasks);
     return this.trigger(tasks);
   },
   onAddTask: function(params) {
+    if (!this.tasks) {
+      this.tasks = Immutable.List();
+    }
     return this.updateTasks(this.tasks.push(Immutable.Map({
       id: Utils.uuid(),
       title: params.title,
@@ -339,8 +264,6 @@ module.exports = Reflux.createStore({
 ;require.register("utils", function(exports, require, module) {
 module.exports = {
   uuid: function() {
-
-    /*jshint bitwise:false */
     var i, random, uuid;
     i = void 0;
     random = void 0;
@@ -355,13 +278,6 @@ module.exports = {
       i++;
     }
     return uuid;
-  },
-  pluralize: function(count, word) {
-    if (count === 1) {
-      return word;
-    } else {
-      return word + 's';
-    }
   },
   store: function(namespace, data) {
     var store;
@@ -385,21 +301,6 @@ module.exports = {
       i++;
     }
     return newObj;
-  },
-  dayTitle: function(day) {
-    var date, months;
-    date = new Date(parseInt(day));
-    months = 'Jan,Feb,Mar,Apr,May,June,July,Aug,Sep,Oct,Nov,Dec'.split(',');
-    return date.getDate() + ' ' + months[date.getMonth()];
-  },
-  today: function() {
-    var date;
-    date = new Date;
-    date.setUTCHours(0);
-    date.setUTCMinutes(0);
-    date.setUTCMilliseconds(0);
-    date.setUTCSeconds(0);
-    return date.getTime();
   }
 };
 });
