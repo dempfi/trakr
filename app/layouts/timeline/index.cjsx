@@ -5,9 +5,8 @@ module.exports = React.createClass
   mixins: [Reflux.connect(TasksStore, 'tasks')]
 
   render : ->
-    tasks = @state.tasks
     return (
       <div className='timeline'>
-        {tasks?.map (task) -> <TaskItem key={task.id} task={task}/>}
+        {@state.tasks?.map (task) -> <TaskItem key={task.id} task={task}/>}
       </div>
     )

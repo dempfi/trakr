@@ -1,33 +1,28 @@
 TasksActions  = require 'actions/tasks'
-Utils         = require 'utils'
+db            = require 'utils/storage'
+uuid          = require 'utils/uuid'
 
 module.exports = Reflux.createStore
   listenables    : [TasksActions]
 
-  getInitialState: ->
-    @tasks = [
-      id          : Utils.uuid()
-      title       : 'some cool task'
-      rate        : 45
-      lastStart   : moment().toISOString()
-      project     : 'some cool project'
-      timeslots   : []
-    ]
+  getInitialState : ->
+    @tasks or []
 
+  init: ->
+    @tasks = [] or db('tasks')
+    console.log 'init'
 
-  updateTasks : (tasks) ->
-    @tasks = tasks
-    @trigger(tasks)
-
+  updateTasks : ->
+    @trigger(@tasks)
+    db('tasks', @tasks)
 
   onAddTask : (params) ->
-    unless @tasks
-      @tasks = []
-    @updateTasks @tasks.push
-      id          : Utils.uuid()
+    @tasks.push
+      id          : uuid()
       title       : params.title
       rate        : params.rate
       currency    : params.currency
       lastStart   : moment().toISOString()
       project     : params.project
       timeslots   : []
+    @updateTasks()

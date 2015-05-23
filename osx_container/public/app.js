@@ -193,11 +193,10 @@ TaskItem = require('components/taskItem');
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
   render: function() {
-    var tasks;
-    tasks = this.state.tasks;
+    var _ref;
     return React.createElement("div", {
       "className": 'timeline'
-    }, tasks != null ? tasks.map(function(task) {
+    }, (_ref = this.state.tasks) != null ? _ref.map(function(task) {
       return React.createElement(TaskItem, {
         "key": task.id,
         "task": task
@@ -234,43 +233,38 @@ ReactRouter.run(routes, function(Trakr) {
 });
 
 ;require.register("store/tasks", function(exports, require, module) {
-var TasksActions, Utils;
+var TasksActions, db, uuid;
 
 TasksActions = require('actions/tasks');
 
-Utils = require('utils');
+db = require('utils/storage');
+
+uuid = require('utils/uuid');
 
 module.exports = Reflux.createStore({
   listenables: [TasksActions],
   getInitialState: function() {
-    return this.tasks = [
-      {
-        id: Utils.uuid(),
-        title: 'some cool task',
-        rate: 45,
-        lastStart: moment().toISOString(),
-        project: 'some cool project',
-        timeslots: []
-      }
-    ];
+    return this.tasks || [];
   },
-  updateTasks: function(tasks) {
-    this.tasks = tasks;
-    return this.trigger(tasks);
+  init: function() {
+    this.tasks = [] || db('tasks');
+    return console.log('init');
+  },
+  updateTasks: function() {
+    this.trigger(this.tasks);
+    return db('tasks', this.tasks);
   },
   onAddTask: function(params) {
-    if (!this.tasks) {
-      this.tasks = [];
-    }
-    return this.updateTasks(this.tasks.push({
-      id: Utils.uuid(),
+    this.tasks.push({
+      id: uuid(),
       title: params.title,
       rate: params.rate,
       currency: params.currency,
       lastStart: moment().toISOString(),
       project: params.project,
       timeslots: []
-    }));
+    });
+    return this.updateTasks();
   }
 });
 });
@@ -316,6 +310,34 @@ module.exports = {
     }
     return newObj;
   }
+};
+});
+
+;require.register("utils/storage", function(exports, require, module) {
+module.exports = function(namespace, data) {
+  var store;
+  if (data) {
+    return localStorage.setItem(namespace, JSON.stringify(data));
+  }
+  store = localStorage.getItem(namespace);
+  return store && JSON.parse(store) || void 0;
+};
+});
+
+;require.register("utils/uuid", function(exports, require, module) {
+module.exports = function() {
+  var i, random, uuid;
+  uuid = '';
+  i = 0;
+  while (i < 32) {
+    random = Math.random() * 16 | 0;
+    if (i === 8 || i === 12 || i === 16 || i === 20) {
+      uuid += '-';
+    }
+    uuid += (i === 12 ? 4 : i === 16 ? random & 3 | 8 : random).toString(16);
+    i++;
+  }
+  return uuid;
 };
 });
 
