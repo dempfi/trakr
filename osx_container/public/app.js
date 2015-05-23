@@ -114,13 +114,17 @@ module.exports = Reflux.createActions(['addTask']);
 });
 
 ;require.register("app", function(exports, require, module) {
+var Link;
+
+Link = ReactRouter.Link;
+
 module.exports = React.createClass({
   render: function() {
     return React.createElement("div", {
       "className": 'APP'
-    }, React.createElement(ReactRouter.Link, {
+    }, React.createElement(Link, {
       "to": 'timeline'
-    }, "timeline"), React.createElement(ReactRouter.Link, {
+    }, "timeline"), React.createElement(Link, {
       "to": 'new'
     }, "new task"), React.createElement(ReactRouter.RouteHandler, null));
   }
@@ -193,7 +197,6 @@ module.exports = React.createClass({
   render: function() {
     var tasks;
     tasks = this.state.tasks;
-    console.log(tasks = this.state.tasks);
     return React.createElement("div", {
       "className": 'timeline'
     }, tasks != null ? tasks.map(function(task) {
@@ -207,7 +210,7 @@ module.exports = React.createClass({
 });
 
 ;require.register("router", function(exports, require, module) {
-var App, NewTask, Timeline, routes;
+var App, NewTask, Route, Timeline, routes;
 
 App = require('app');
 
@@ -215,12 +218,14 @@ Timeline = require('layouts/timeline');
 
 NewTask = require('layouts/new-task');
 
-routes = React.createElement(ReactRouter.Route, {
+Route = ReactRouter.Route;
+
+routes = React.createElement(Route, {
   "handler": App
-}, React.createElement(ReactRouter.Route, {
+}, React.createElement(Route, {
   "name": 'new',
   "handler": NewTask
-}), React.createElement(ReactRouter.Route, {
+}), React.createElement(Route, {
   "name": 'timeline',
   "handler": Timeline
 }));

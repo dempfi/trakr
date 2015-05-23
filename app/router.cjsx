@@ -1,12 +1,13 @@
 App       = require 'app'
 Timeline  = require 'layouts/timeline'
 NewTask   = require 'layouts/new-task'
+Route     = ReactRouter.Route
 
 routes = (
-  <ReactRouter.Route handler={App}>
-    <ReactRouter.Route name='new' handler={NewTask} />
-    <ReactRouter.Route name='timeline' handler={Timeline} />
-  </ReactRouter.Route>
+  <Route handler={App}>
+    <Route name='new' handler={NewTask} />
+    <Route name='timeline' handler={Timeline} />
+  </Route>
 );
 
 ReactRouter.run routes, (Trakr) ->
