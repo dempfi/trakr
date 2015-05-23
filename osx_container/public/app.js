@@ -124,9 +124,9 @@ module.exports = React.createClass({
       "className": 'APP'
     }, React.createElement(Link, {
       "to": 'timeline'
-    }, "timeline"), React.createElement(Link, {
+    }, "timeline"), " |", React.createElement(Link, {
       "to": 'new'
-    }, "new task"), React.createElement(ReactRouter.RouteHandler, null));
+    }, "new task"), React.createElement("hr", null), React.createElement(ReactRouter.RouteHandler, null));
   }
 });
 });
@@ -164,19 +164,19 @@ module.exports = React.createClass({
       "className": 'new-task'
     }, React.createElement("input", {
       "placeholder": 'title'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'project'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'rate'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'currency'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'estimate'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'deadline'
-    }), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'complexity'
-    }), React.createElement("div", {
+    }), React.createElement("br", null), React.createElement("button", {
       "onClick": this.addTask
     }, "add task"));
   }
@@ -247,8 +247,7 @@ module.exports = Reflux.createStore({
     return this.tasks || [];
   },
   init: function() {
-    this.tasks = [] || db('tasks');
-    return console.log('init');
+    return this.tasks = db('tasks') || [];
   },
   updateTasks: function() {
     this.trigger(this.tasks);

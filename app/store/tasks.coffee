@@ -9,8 +9,7 @@ module.exports = Reflux.createStore
     @tasks or []
 
   init: ->
-    @tasks = [] or db('tasks')
-    console.log 'init'
+    @tasks =  db('tasks') or []
 
   updateTasks : ->
     @trigger(@tasks)

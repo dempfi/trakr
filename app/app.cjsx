@@ -4,8 +4,9 @@ module.exports = React.createClass
   render: ->
     return (
       <div className='APP'>
-        <Link to='timeline'>timeline</Link>
+        <Link to='timeline'>timeline</Link> |
         <Link to='new'>new task</Link>
+        <hr/>
         <ReactRouter.RouteHandler/>
       </div>
     )

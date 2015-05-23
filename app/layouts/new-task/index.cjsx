@@ -19,13 +19,13 @@ module.exports = React.createClass
   render : ->
     return (
       <div className='new-task'>
-        <input placeholder='title'/>
-        <input placeholder='project'/>
-        <input placeholder='rate'/>
-        <input placeholder='currency'/>
-        <input placeholder='estimate'/>
-        <input placeholder='deadline'/>
-        <input placeholder='complexity'/>
-        <div onClick={@addTask}>add task</div>
+        <input placeholder='title'/><br/>
+        <input placeholder='project'/><br/>
+        <input placeholder='rate'/><br/>
+        <input placeholder='currency'/><br/>
+        <input placeholder='estimate'/><br/>
+        <input placeholder='deadline'/><br/>
+        <input placeholder='complexity'/><br/>
+        <button onClick={@addTask}>add task</button>
       </div>
     )
