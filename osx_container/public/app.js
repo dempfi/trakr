@@ -134,9 +134,7 @@ module.exports = React.createClass({
 ;require.register("components/taskItem", function(exports, require, module) {
 module.exports = React.createClass({
   render: function() {
-    var title;
-    title = this.props.task.get('title');
-    return React.createElement("div", null, this.props.task.get('title'), " ", this.props.task.get('project'));
+    return React.createElement("div", null, this.props.task.title, " ", this.props.task.project);
   }
 });
 });
@@ -201,7 +199,7 @@ module.exports = React.createClass({
       "className": 'timeline'
     }, tasks != null ? tasks.map(function(task) {
       return React.createElement(TaskItem, {
-        "key": task.get('id'),
+        "key": task.id,
         "task": task
       });
     }) : void 0);
@@ -244,16 +242,27 @@ Utils = require('utils');
 
 module.exports = Reflux.createStore({
   listenables: [TasksActions],
+  getInitialState: function() {
+    return this.tasks = [
+      {
+        id: Utils.uuid(),
+        title: 'some cool task',
+        rate: 45,
+        lastStart: moment().toISOString(),
+        project: 'some cool project',
+        timeslots: []
+      }
+    ];
+  },
   updateTasks: function(tasks) {
     this.tasks = tasks;
-    console.log(this.tasks);
     return this.trigger(tasks);
   },
   onAddTask: function(params) {
     if (!this.tasks) {
-      this.tasks = Immutable.List();
+      this.tasks = [];
     }
-    return this.updateTasks(this.tasks.push(Immutable.Map({
+    return this.updateTasks(this.tasks.push({
       id: Utils.uuid(),
       title: params.title,
       rate: params.rate,
@@ -261,7 +270,7 @@ module.exports = Reflux.createStore({
       lastStart: moment().toISOString(),
       project: params.project,
       timeslots: []
-    })));
+    }));
   }
 });
 });

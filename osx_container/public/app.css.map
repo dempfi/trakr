@@ -1,1 +1,1 @@
-{"version":3,"sources":["app/layouts/timeline/index.styl"],"names":[],"mappings":"AAAA;AACA;AACA;AACA","file":"osx_container/public/app.css","sourcesContent":["body {\n  background: #f00;\n}\n"]}
+{"version":3,"sources":["app/layouts/timeline/index.styl"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA","file":"osx_container/public/app.css","sourcesContent":["body {\n  background: #fff;\n  font-family: sans-serif;\n}\n"]}
