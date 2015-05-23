@@ -148,6 +148,17 @@ TasksActions = require('actions/tasks');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
+  getInitialState: function() {
+    return {
+      title: '',
+      project: '',
+      rate: 0,
+      currency: '$',
+      estimate: '',
+      deadline: '',
+      complexity: 0
+    };
+  },
   addTask: function() {
     return TasksActions.addTask({
       title: 'some cool title',
@@ -159,12 +170,23 @@ module.exports = React.createClass({
       complexity: 8
     });
   },
+  onChange: function(key, e) {
+    var obj;
+    obj = {};
+    obj[key] = e.target.value;
+    return this.setState(obj);
+  },
   render: function() {
+    console.log(new Date().toUTCString());
     return React.createElement("div", {
       "className": 'new-task'
     }, React.createElement("input", {
+      "value": this.state.title,
+      "onChange": this.onChange.bind(this, 'title'),
       "placeholder": 'title'
     }), React.createElement("br", null), React.createElement("input", {
+      "value": this.state.title,
+      "onChange": this.onChange.bind(this, 'title'),
       "placeholder": 'project'
     }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'rate'

@@ -4,6 +4,16 @@ TasksActions    = require 'actions/tasks'
 module.exports = React.createClass
   mixins: [Reflux.connect(TasksStore, 'tasks')]
 
+  getInitialState : ->
+    return {
+      title       : ''
+      project     : ''
+      rate        : 0
+      currency    : '$'
+      estimate    : ''
+      deadline    : ''
+      complexity  : 0
+    }
 
   addTask : ->
     TasksActions.addTask({
@@ -16,11 +26,26 @@ module.exports = React.createClass
       complexity  : 8
     })
 
+
+  onChange : (key ,e) ->
+    obj = {}
+    obj[key] = e.target.value
+    @setState obj
+
   render : ->
+    console.log new Date().toUTCString()
     return (
       <div className='new-task'>
-        <input placeholder='title'/><br/>
-        <input placeholder='project'/><br/>
+        <input
+          value={@state.title}
+          onChange={@onChange.bind(@,'title')}
+          placeholder='title'
+        /><br/>
+        <input
+          value={@state.title}
+          onChange={@onChange.bind(@,'title')}
+          placeholder='project'
+        /><br/>
         <input placeholder='rate'/><br/>
         <input placeholder='currency'/><br/>
         <input placeholder='estimate'/><br/>
