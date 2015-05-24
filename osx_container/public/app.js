@@ -131,6 +131,52 @@ module.exports = React.createClass({
 });
 });
 
+;require.register("components/form/autocomplete", function(exports, require, module) {
+module.exports = React.createClass({
+  getInitialState: function() {
+    return {
+      value: ''
+    };
+  },
+  onChange: function(e) {
+    var filteredList, reg, value;
+    value = e.target.value;
+    reg = new RegExp("^" + value, 'i');
+    filteredList = _.filter(this.props.list, (function(_this) {
+      return function(i) {
+        return reg.test(i[_this.props.titleKey]);
+      };
+    })(this));
+    return this.setState({
+      list: filteredList,
+      value: value
+    });
+  },
+  selectItem: function(item) {
+    return this.setState({
+      value: item[this.props.titleKey]
+    });
+  },
+  renderItem: function(item) {
+    return React.createElement("li", {
+      "key": item[this.props.valueKey],
+      "onClick": this.selectItem.bind(this, item)
+    }, item[this.props.titleKey]);
+  },
+  render: function() {
+    var _ref;
+    return React.createElement("div", null, React.createElement("input", {
+      "value": this.state.value,
+      "onChange": this.onChange
+    }), React.createElement("ul", null, (_ref = this.state.list) != null ? _ref.map((function(_this) {
+      return function(item) {
+        return _this.renderItem(item);
+      };
+    })(this)) : void 0));
+  }
+});
+});
+
 ;require.register("components/taskItem", function(exports, require, module) {
 module.exports = React.createClass({
   render: function() {
@@ -140,11 +186,13 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/new-task/index", function(exports, require, module) {
-var TasksActions, TasksStore;
+var Autocomplete, TasksActions, TasksStore;
 
 TasksStore = require('store/tasks');
 
 TasksActions = require('actions/tasks');
+
+Autocomplete = require('components/form/autocomplete');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
@@ -160,15 +208,7 @@ module.exports = React.createClass({
     };
   },
   addTask: function() {
-    return TasksActions.addTask({
-      title: 'some cool title',
-      rate: 34,
-      currency: '$',
-      project: 'project',
-      estimate: [7, 9],
-      deadline: moment().toISOString(),
-      complexity: 8
-    });
+    return TasksActions.addTask(this.state);
   },
   onChange: function(key, e) {
     var obj;
@@ -177,7 +217,6 @@ module.exports = React.createClass({
     return this.setState(obj);
   },
   render: function() {
-    console.log(new Date().toUTCString());
     return React.createElement("div", {
       "className": 'new-task'
     }, React.createElement("input", {
@@ -185,18 +224,39 @@ module.exports = React.createClass({
       "onChange": this.onChange.bind(this, 'title'),
       "placeholder": 'title'
     }), React.createElement("br", null), React.createElement("input", {
-      "value": this.state.title,
-      "onChange": this.onChange.bind(this, 'title'),
+      "value": this.state.project,
+      "onChange": this.onChange.bind(this, 'project'),
       "placeholder": 'project'
-    }), React.createElement("br", null), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement(Autocomplete, {
+      "list": [
+        {
+          id: '1',
+          title: 'project'
+        }, {
+          id: '2',
+          title: 'other project'
+        }
+      ],
+      "valueKey": 'id',
+      "titleKey": 'title',
+      "onSelect": (function() {})
+    }), React.createElement("input", {
+      "value": this.state.rate,
+      "onChange": this.onChange.bind(this, 'rate'),
       "placeholder": 'rate'
     }), React.createElement("br", null), React.createElement("input", {
-      "placeholder": 'currency'
+      "value": this.state.currency,
+      "placeholder": 'currency',
+      "readOnly": true
     }), React.createElement("br", null), React.createElement("input", {
-      "placeholder": 'estimate'
+      "placeholder": 'estimate',
+      "readOnly": true
     }), React.createElement("br", null), React.createElement("input", {
-      "placeholder": 'deadline'
+      "placeholder": 'deadline',
+      "readOnly": true
     }), React.createElement("br", null), React.createElement("input", {
+      "value": this.state.complexity,
+      "onChange": this.onChange.bind(this, 'complexity'),
       "placeholder": 'complexity'
     }), React.createElement("br", null), React.createElement("button", {
       "onClick": this.addTask

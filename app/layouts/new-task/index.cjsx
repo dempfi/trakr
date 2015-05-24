@@ -1,5 +1,6 @@
 TasksStore      = require 'store/tasks'
 TasksActions    = require 'actions/tasks'
+Autocomplete    = require 'components/form/autocomplete'
 
 module.exports = React.createClass
   mixins: [Reflux.connect(TasksStore, 'tasks')]
@@ -16,15 +17,7 @@ module.exports = React.createClass
     }
 
   addTask : ->
-    TasksActions.addTask({
-      title       : 'some cool title'
-      rate        : 34
-      currency    : '$'
-      project     : 'project'
-      estimate    : [7,9]
-      deadline    : moment().toISOString()
-      complexity  : 8
-    })
+    TasksActions.addTask(@state)
 
 
   onChange : (key ,e) ->
@@ -33,7 +26,6 @@ module.exports = React.createClass
     @setState obj
 
   render : ->
-    console.log new Date().toUTCString()
     return (
       <div className='new-task'>
         <input
@@ -42,15 +34,38 @@ module.exports = React.createClass
           placeholder='title'
         /><br/>
         <input
-          value={@state.title}
-          onChange={@onChange.bind(@,'title')}
+          value={@state.project}
+          onChange={@onChange.bind(@,'project')}
           placeholder='project'
         /><br/>
-        <input placeholder='rate'/><br/>
-        <input placeholder='currency'/><br/>
-        <input placeholder='estimate'/><br/>
-        <input placeholder='deadline'/><br/>
-        <input placeholder='complexity'/><br/>
+        <Autocomplete
+          list={[
+            {
+              id : '1'
+              title : 'project'
+            }
+            {
+              id : '2'
+              title : 'other project'
+            }
+          ]}
+          valueKey='id'
+          titleKey='title'
+          onSelect={->}
+        />
+        <input
+          value={@state.rate}
+          onChange={@onChange.bind(@,'rate')}
+          placeholder='rate'
+        /><br/>
+        <input value={@state.currency} placeholder='currency' readOnly/><br/>
+        <input placeholder='estimate' readOnly/><br/>
+        <input placeholder='deadline' readOnly/><br/>
+        <input
+          value={@state.complexity}
+          onChange={@onChange.bind(@,'complexity')}
+          placeholder='complexity'
+        /><br/>
         <button onClick={@addTask}>add task</button>
       </div>
     )
