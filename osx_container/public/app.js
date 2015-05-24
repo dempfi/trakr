@@ -131,11 +131,12 @@ module.exports = React.createClass({
 });
 });
 
-;require.register("components/form/autocomplete", function(exports, require, module) {
+;require.register("components/autocomplete/index", function(exports, require, module) {
 module.exports = React.createClass({
   getInitialState: function() {
     return {
-      value: ''
+      value: '',
+      activeItem: {}
     };
   },
   onChange: function(e) {
@@ -152,23 +153,90 @@ module.exports = React.createClass({
       value: value
     });
   },
-  selectItem: function(item) {
+  handleFocus: function() {
     return this.setState({
-      value: item[this.props.titleKey]
+      isOpen: true
     });
   },
+  handleBlur: function() {
+    return this.setState({
+      isOpen: false
+    });
+  },
+  handleEnter: function() {
+    return this.selectItem(this.state.activeItem);
+  },
+  selectItem: function(item) {
+    this.setState({
+      value: item[this.props.titleKey]
+    });
+    return this.props.onSelect(item);
+  },
+  handleKeyDown: function(e) {
+    switch (e.key) {
+      case 'ArrowDown':
+        return this.updateIndex('down');
+      case 'ArrowUp':
+        return this.updateIndex('up');
+      case 'Enter':
+        return this.handleEnter();
+      case 'Escape':
+        return console.log('ESC');
+    }
+  },
+  updateIndex: function(direction) {
+    var current, currentId, lastId, nextId;
+    current = this.state.activeItem;
+    currentId = this.state.list.indexOf(current);
+    lastId = this.state.list.length - 1;
+    nextId = direction === 'down' ? this.indexDown(currentId, lastId) : this.indexUp(currentId, lastId);
+    return this.setState({
+      activeItem: this.state.list[nextId]
+    });
+  },
+  indexDown: function(cur, last) {
+    if (cur < 0 || cur === last) {
+      return 0;
+    }
+    if (cur < last) {
+      return cur + 1;
+    }
+    return last;
+  },
+  indexUp: function(cur, last) {
+    if (cur <= 0) {
+      return last;
+    }
+    if (cur <= last) {
+      return cur - 1;
+    }
+    return last;
+  },
   renderItem: function(item) {
+    var active;
+    active = this.state.activeItem[this.props.valueKey] === item[this.props.valueKey];
     return React.createElement("li", {
       "key": item[this.props.valueKey],
       "onClick": this.selectItem.bind(this, item)
-    }, item[this.props.titleKey]);
+    }, "" + active, " ", item[this.props.titleKey]);
   },
   render: function() {
-    var _ref;
-    return React.createElement("div", null, React.createElement("input", {
+    var listClasses, _ref;
+    listClasses = {
+      list: true,
+      isOpen: this.state.isOpen
+    };
+    return React.createElement("div", {
+      "className": 'autocomplete'
+    }, React.createElement("input", {
       "value": this.state.value,
-      "onChange": this.onChange
-    }), React.createElement("ul", null, (_ref = this.state.list) != null ? _ref.map((function(_this) {
+      "onChange": this.onChange,
+      "onKeyDown": this.handleKeyDown,
+      "onFocus": this.handleFocus,
+      "onBlur": this.handleBlur
+    }), React.createElement("ul", {
+      "className": classNames(listClasses)
+    }, (_ref = this.state.list) != null ? _ref.map((function(_this) {
       return function(item) {
         return _this.renderItem(item);
       };
@@ -192,7 +260,7 @@ TasksStore = require('store/tasks');
 
 TasksActions = require('actions/tasks');
 
-Autocomplete = require('components/form/autocomplete');
+Autocomplete = require('components/autocomplete');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
@@ -235,6 +303,12 @@ module.exports = React.createClass({
         }, {
           id: '2',
           title: 'other project'
+        }, {
+          id: '3',
+          title: 'some other project'
+        }, {
+          id: '4',
+          title: 'yet some other project'
         }
       ],
       "valueKey": 'id',

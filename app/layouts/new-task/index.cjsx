@@ -1,6 +1,6 @@
 TasksStore      = require 'store/tasks'
 TasksActions    = require 'actions/tasks'
-Autocomplete    = require 'components/form/autocomplete'
+Autocomplete    = require 'components/autocomplete'
 
 module.exports = React.createClass
   mixins: [Reflux.connect(TasksStore, 'tasks')]
@@ -47,6 +47,14 @@ module.exports = React.createClass
             {
               id : '2'
               title : 'other project'
+            }
+            {
+              id : '3'
+              title : 'some other project'
+            }
+            {
+              id : '4'
+              title : 'yet some other project'
             }
           ]}
           valueKey='id'

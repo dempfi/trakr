@@ -1,3 +1,14 @@
+.autocomplete {
+  color: #f00;
+}
+.autocomplete .list {
+  color: #000;
+  display: none;
+}
+.autocomplete .list.isOpen {
+  display: block;
+}
+
 body {
   background: #fff;
   font-family: sans-serif;
