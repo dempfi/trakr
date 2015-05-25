@@ -114,7 +114,7 @@ module.exports = Reflux.createActions(['add', 'addTask']);
 });
 
 ;require.register("actions/tasks", function(exports, require, module) {
-module.exports = Reflux.createActions(['add']);
+module.exports = Reflux.createActions(['add', 'addTimeslot', 'stopTimeslot']);
 });
 
 ;require.register("app", function(exports, require, module) {
@@ -262,9 +262,18 @@ module.exports = React.createClass({
 });
 
 ;require.register("components/taskItem", function(exports, require, module) {
+var Link;
+
+Link = ReactRouter.Link;
+
 module.exports = React.createClass({
   render: function() {
-    return React.createElement("div", null, this.props.task.title, " ", this.props.task.project);
+    return React.createElement("div", null, React.createElement(Link, {
+      "to": 'task',
+      "params": {
+        id: this.props.task.id
+      }
+    }, this.props.task.title, " ", this.props.task.project));
   }
 });
 });
@@ -393,6 +402,40 @@ module.exports = React.createClass({
 });
 });
 
+;require.register("layouts/task/index", function(exports, require, module) {
+var TasksActions, TasksStore;
+
+TasksStore = require('store/tasks');
+
+TasksActions = require('actions/tasks');
+
+module.exports = React.createClass({
+  mixins: [
+    Reflux.connectFilter(TasksStore, 'task', function(tasks) {
+      return _.filter(tasks, 'id', this.props.params.id)[0];
+    })
+  ],
+  start: function() {
+    return TasksActions.addTimeslot(this.state.task.id);
+  },
+  stop: function() {
+    return TasksActions.stopTimeslot(this.state.task.id);
+  },
+  totalWorked: function() {
+    return this.state.task.timeslots.reduce((function(i, n) {
+      return i + n.duration;
+    }), 0);
+  },
+  render: function() {
+    return React.createElement("div", null, this.state.task.title, React.createElement("br", null), this.state.task.rate, this.state.task.currency, React.createElement("br", null), "worked : ", this.totalWorked(), "s", React.createElement("br", null), "earned : ", this.totalWorked() / 3600 * this.state.task.rate, this.state.task.currency, React.createElement("br", null), React.createElement("button", {
+      "onClick": this.start
+    }, "Start"), React.createElement("button", {
+      "onClick": this.stop
+    }, "Stop"));
+  }
+});
+});
+
 ;require.register("layouts/timeline/index", function(exports, require, module) {
 var ProjectsStore, TaskItem, TasksStore;
 
@@ -419,7 +462,7 @@ module.exports = React.createClass({
 });
 
 ;require.register("router", function(exports, require, module) {
-var App, NewProject, NewTask, Route, Timeline, routes;
+var App, NewProject, NewTask, Route, Task, Timeline, routes;
 
 App = require('app');
 
@@ -428,6 +471,8 @@ Timeline = require('layouts/timeline');
 NewTask = require('layouts/new-task');
 
 NewProject = require('layouts/new-project');
+
+Task = require('layouts/task');
 
 Route = ReactRouter.Route;
 
@@ -442,6 +487,10 @@ routes = React.createElement(Route, {
 }), React.createElement(Route, {
   "name": 'timeline',
   "handler": Timeline
+}), React.createElement(Route, {
+  "name": 'task',
+  "path": '/task/:id',
+  "handler": Task
 }));
 
 ReactRouter.run(routes, function(Trakr) {
@@ -510,11 +559,25 @@ module.exports = Reflux.createStore({
     return this.tasks || [];
   },
   init: function() {
-    return this.tasks = db('tasks') || [];
+    this.tasks = db('tasks') || [];
+    return setInterval(((function(_this) {
+      return function() {
+        return _this.updateTimeslot();
+      };
+    })(this)), 1000);
   },
   update: function() {
     this.trigger(this.tasks);
     return db('tasks', this.tasks);
+  },
+  updateTimeslot: function() {
+    this.tasks = this.tasks.map(function(task) {
+      if (task.isActive) {
+        task.timeslots[task.timeslots.length - 1].duration += 1;
+      }
+      return task;
+    });
+    return this.update();
   },
   onAdd: function(params) {
     var id;
@@ -529,6 +592,36 @@ module.exports = Reflux.createStore({
       timeslots: []
     });
     ProjectsActions.addTask(params.project, id);
+    return this.update();
+  },
+  onAddTimeslot: function(id) {
+    this.tasks = this.tasks.map(function(task) {
+      task.isActive = false;
+      if (task.id === id) {
+        task.lastStart = moment().toISOString();
+        task.isActive = true;
+        task.timeslots.push({
+          start: moment().toISOString(),
+          duration: 0
+        });
+      }
+      return task;
+    });
+    return this.update();
+  },
+  onStopTimeslot: function(id) {
+    this.tasks = this.tasks.map(function(task) {
+      task.isActive = false;
+      if (task.id === id) {
+        task.lastStart = moment().toISOString();
+        task.isActive = false;
+        task.timeslots.push({
+          start: moment().toISOString(),
+          duration: 0
+        });
+      }
+      return task;
+    });
     return this.update();
   }
 });
