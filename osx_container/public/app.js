@@ -261,6 +261,33 @@ module.exports = React.createClass({
 });
 });
 
+;require.register("components/dateribbon", function(exports, require, module) {
+module.exports = React.createClass({
+  generateArray: function() {
+    var array, i, _i;
+    array = [];
+    for (i = _i = 0; _i <= 30; i = ++_i) {
+      array.push(moment().subtract(i, 'd'));
+    }
+    return array;
+  },
+  date: function(m) {
+    var onSelect;
+    onSelect = this.props.onSelect;
+    return React.createElement("li", {
+      "onClick": onSelect.bind(this, m)
+    }, m.format('D ddd'));
+  },
+  render: function() {
+    return React.createElement("div", null, this.generateArray().map((function(_this) {
+      return function(m) {
+        return _this.date(m);
+      };
+    })(this)));
+  }
+});
+});
+
 ;require.register("components/taskItem", function(exports, require, module) {
 var Link;
 
@@ -437,7 +464,7 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/timeline/index", function(exports, require, module) {
-var ProjectsStore, TaskItem, TasksStore;
+var Dateribbon, ProjectsStore, TaskItem, TasksStore;
 
 TasksStore = require('store/tasks');
 
@@ -445,13 +472,20 @@ ProjectsStore = require('store/projects');
 
 TaskItem = require('components/taskItem');
 
+Dateribbon = require('components/dateribbon');
+
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
+  showByDate: function(d) {
+    return console.log(d);
+  },
   render: function() {
     var _ref;
     return React.createElement("div", {
       "className": 'timeline'
-    }, (_ref = this.state.tasks) != null ? _ref.map(function(task) {
+    }, React.createElement(Dateribbon, {
+      "onSelect": this.showByDate
+    }), (_ref = this.state.tasks) != null ? _ref.map(function(task) {
       return React.createElement(TaskItem, {
         "key": task.id,
         "task": task
@@ -571,13 +605,12 @@ module.exports = Reflux.createStore({
     return db('tasks', this.tasks);
   },
   updateTimeslot: function() {
-    this.tasks = this.tasks.map(function(task) {
+    return this.tasks = this.tasks.map(function(task) {
       if (task.isActive) {
         task.timeslots[task.timeslots.length - 1].duration += 1;
       }
       return task;
     });
-    return this.update();
   },
   onAdd: function(params) {
     var id;
