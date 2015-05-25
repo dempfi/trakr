@@ -1,4 +1,5 @@
 TasksStore      = require 'store/tasks'
+ProjectsStore   = require 'store/projects'
 TaskItem        = require 'components/taskItem'
 
 module.exports = React.createClass

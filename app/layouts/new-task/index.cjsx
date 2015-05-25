@@ -1,9 +1,11 @@
-TasksStore      = require 'store/tasks'
-TasksActions    = require 'actions/tasks'
-Autocomplete    = require 'components/autocomplete'
+TasksStore        = require 'store/tasks'
+TasksActions      = require 'actions/tasks'
+ProjectsActions   = require 'actions/projects'
+ProjectsStore     = require 'store/projects'
+Autocomplete      = require 'components/autocomplete'
 
 module.exports = React.createClass
-  mixins: [Reflux.connect(TasksStore, 'tasks')]
+  mixins: [Reflux.connect(ProjectsStore, 'projects')]
 
   getInitialState : ->
     return {
@@ -17,8 +19,12 @@ module.exports = React.createClass
     }
 
   addTask : ->
-    TasksActions.addTask(@state)
+    state = @state
+    delete state.projects
+    TasksActions.add state
 
+  projectSelect : (i) ->
+    @setState 'project' : i.id
 
   onChange : (key ,e) ->
     obj = {}
@@ -33,33 +39,11 @@ module.exports = React.createClass
           onChange={@onChange.bind(@,'title')}
           placeholder='title'
         /><br/>
-        <input
-          value={@state.project}
-          onChange={@onChange.bind(@,'project')}
-          placeholder='project'
-        /><br/>
         <Autocomplete
-          list={[
-            {
-              id : '1'
-              title : 'project'
-            }
-            {
-              id : '2'
-              title : 'other project'
-            }
-            {
-              id : '3'
-              title : 'some other project'
-            }
-            {
-              id : '4'
-              title : 'yet some other project'
-            }
-          ]}
+          list={@state.projects}
           valueKey='id'
           titleKey='title'
-          onSelect={->}
+          onSelect={@projectSelect}
         />
         <input
           value={@state.rate}

@@ -15,8 +15,13 @@ module.exports = React.createClass
 
 
   handleFocus : -> @setState isOpen : true
-  handleBlur  : -> @setState isOpen : false
-  handleEnter : -> @selectItem @state.activeItem
+  handleBlur  : ->
+    setTimeout =>
+      @setState isOpen : false
+    , 10
+  handleEnter : ->
+    @selectItem @state.activeItem
+    @setState isOpen : false
 
 
   selectItem : (item) ->
@@ -55,10 +60,13 @@ module.exports = React.createClass
 
 
   renderItem : (item) ->
-    active = @state.activeItem[@props.valueKey] is item[@props.valueKey]
+    styles = isActive : @state.activeItem[@props.valueKey] is item[@props.valueKey]
     return (
-      <li key = {item[@props.valueKey]} onClick={@selectItem.bind(@, item)}>
-        {"#{active}"} {item[@props.titleKey]}
+      <li
+        className = {classNames(styles)}
+        key       = {item[@props.valueKey]}
+        onClick   = {@selectItem.bind(@, item)}>
+        {item[@props.titleKey]}
       </li>
     )
 

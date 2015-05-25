@@ -8,6 +8,9 @@
 .autocomplete .list.isOpen {
   display: block;
 }
+.autocomplete .list li.isActive {
+  color: #f00;
+}
 
 body {
   background: #fff;

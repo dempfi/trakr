@@ -1,4 +1,5 @@
 TasksActions  = require 'actions/tasks'
+ProjectsActions  = require 'actions/projects'
 db            = require 'utils/storage'
 uuid          = require 'utils/uuid'
 
@@ -11,17 +12,19 @@ module.exports = Reflux.createStore
   init: ->
     @tasks =  db('tasks') or []
 
-  updateTasks : ->
+  update : ->
     @trigger(@tasks)
     db('tasks', @tasks)
 
-  onAddTask : (params) ->
+  onAdd : (params) ->
+    id = uuid()
     @tasks.push
-      id          : uuid()
+      id          : id
       title       : params.title
       rate        : params.rate
       currency    : params.currency
       lastStart   : moment().toISOString()
       project     : params.project
       timeslots   : []
-    @updateTasks()
+    ProjectsActions.addTask params.project, id
+    @update()
