@@ -1,3 +1,5 @@
+Link = ReactRouter.Link
+
 module.exports = React.createClass
 
   generateArray : ->
@@ -6,17 +8,10 @@ module.exports = React.createClass
     array
 
   date : (m) ->
-    onSelect = @props.onSelect
-    return (
-      <li
-        onClick={onSelect.bind(@,m)}
-      >{m.format('D ddd')}</li>
-    )
-
+    <Link
+      to='timeline'
+      params={date : m.format('YYYY-MM-DD')}
+    >{m.format('D ddd')}</Link>
 
   render : ->
-    return (
-      <div>
-        {@generateArray().map (m) => @date(m)}
-      </div>
-    )
+    return <ul>{@generateArray().map (m) => @date(m)} </ul>

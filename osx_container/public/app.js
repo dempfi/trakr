@@ -127,7 +127,10 @@ module.exports = React.createClass({
     return React.createElement("div", {
       "className": 'APP'
     }, React.createElement(Link, {
-      "to": 'timeline'
+      "to": 'timeline',
+      "params": {
+        date: moment().format('YYYY-MM-DD')
+      }
     }, "timeline"), " |", React.createElement(Link, {
       "to": 'new-task'
     }, "new task"), " |", React.createElement(Link, {
@@ -262,6 +265,10 @@ module.exports = React.createClass({
 });
 
 ;require.register("components/dateribbon", function(exports, require, module) {
+var Link;
+
+Link = ReactRouter.Link;
+
 module.exports = React.createClass({
   generateArray: function() {
     var array, i, _i;
@@ -272,18 +279,19 @@ module.exports = React.createClass({
     return array;
   },
   date: function(m) {
-    var onSelect;
-    onSelect = this.props.onSelect;
-    return React.createElement("li", {
-      "onClick": onSelect.bind(this, m)
+    return React.createElement(Link, {
+      "to": 'timeline',
+      "params": {
+        date: m.format('YYYY-MM-DD')
+      }
     }, m.format('D ddd'));
   },
   render: function() {
-    return React.createElement("div", null, this.generateArray().map((function(_this) {
+    return React.createElement("ul", null, this.generateArray().map((function(_this) {
       return function(m) {
         return _this.date(m);
       };
-    })(this)));
+    })(this)), " ");
   }
 });
 });
@@ -476,21 +484,28 @@ Dateribbon = require('components/dateribbon');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
-  showByDate: function(d) {
-    return console.log(d);
+  tasksByDay: function() {
+    var db, tasks, _ref;
+    db = new loki('Example');
+    console.log(loki);
+    console.time('start');
+    tasks = _.filter((_ref = this.state) != null ? _ref.tasks : void 0, (function(_this) {
+      return function(task) {
+        return moment(task.lastStart).isSame(_this.props.params.date, 'day') || _.some(task.timeslots, function(slot) {
+          return moment(slot).isSame(_this.props.params.date, 'day');
+        });
+      };
+    })(this));
+    console.log(tasks);
+    console.timeEnd('start');
+    return '';
   },
   render: function() {
-    var _ref;
     return React.createElement("div", {
       "className": 'timeline'
     }, React.createElement(Dateribbon, {
       "onSelect": this.showByDate
-    }), (_ref = this.state.tasks) != null ? _ref.map(function(task) {
-      return React.createElement(TaskItem, {
-        "key": task.id,
-        "task": task
-      });
-    }) : void 0);
+    }), this.tasksByDay());
   }
 });
 });
@@ -520,6 +535,7 @@ routes = React.createElement(Route, {
   "handler": NewProject
 }), React.createElement(Route, {
   "name": 'timeline',
+  "path": '/timeline/:date',
   "handler": Timeline
 }), React.createElement(Route, {
   "name": 'task',
@@ -605,12 +621,13 @@ module.exports = Reflux.createStore({
     return db('tasks', this.tasks);
   },
   updateTimeslot: function() {
-    return this.tasks = this.tasks.map(function(task) {
+    this.tasks = this.tasks.map(function(task) {
       if (task.isActive) {
         task.timeslots[task.timeslots.length - 1].duration += 1;
       }
       return task;
     });
+    return this.update();
   },
   onAdd: function(params) {
     var id;

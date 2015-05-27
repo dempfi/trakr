@@ -23,7 +23,7 @@ module.exports = Reflux.createStore
       if task.isActive
         task.timeslots[task.timeslots.length-1].duration += 1
       task
-    # @update()
+    @update()
 
 
   onAdd : (params) ->

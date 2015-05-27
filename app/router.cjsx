@@ -9,7 +9,7 @@ routes = (
   <Route handler={App}>
     <Route name='new-task' handler={NewTask} />
     <Route name='new-project' handler={NewProject} />
-    <Route name='timeline' handler={Timeline} />
+    <Route name='timeline' path='/timeline/:date' handler={Timeline} />
     <Route name='task' path='/task/:id' handler={Task} />
   </Route>
 );
