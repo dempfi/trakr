@@ -1,7 +1,5 @@
-TasksActions  = require 'actions/tasks'
-ProjectsActions  = require 'actions/projects'
-db            = require 'utils/storage'
-uuid          = require 'utils/uuid'
+TasksActions      = require 'actions/tasks'
+ProjectsActions   = require 'actions/projects'
 
 module.exports = Reflux.createStore
   listenables    : [TasksActions]
@@ -10,18 +8,24 @@ module.exports = Reflux.createStore
     @tasks or []
 
   init: ->
-    @tasks =  db('tasks') or []
+    @tasks =  _.load('tasks')
     setInterval (=> @updateTimeslot()), 1000
+
+
+  getSession : (id, key) ->
+    task  = _.get(@tasks, id)
+    return task.sessions[key] or []
+
 
   update : ->
     @trigger(@tasks)
-    db('tasks', @tasks)
+    _.save(@tasks,'tasks')
 
 
   updateTimeslot : ->
     @tasks = @tasks.map (task) ->
       if task.isActive
-        task.timeslots[task.timeslots.length-1].duration += 1
+        task.sessions[task.sessions.length-1].duration += 1
       task
     @update()
 
@@ -35,23 +39,23 @@ module.exports = Reflux.createStore
       currency    : params.currency
       lastStart   : moment().toISOString()
       project     : params.project
-      timeslots   : []
+      sessions   : {}
     ProjectsActions.addTask params.project, id
     @update()
 
 
   onAddTimeslot : (id) ->
-    @tasks = @tasks.map (task) ->
-      task.isActive = false
-      if task.id is id
-        task.lastStart = moment().toISOString()
-        task.isActive = true
-        task.timeslots.push(
-          start     : moment().toISOString()
-          duration  : 0
-        )
-      task
+    task = @get id
+    key  = moment().format('YYYY-MM-DD')
+    task.sessions[key] = [] unless task.sessions[key]
+    task.sessions[key].push
+      duration  : 0
+      start     : moment().toISOString()
+
     @update()
+
+
+
 
 
   onStopTimeslot : (id) ->
@@ -60,7 +64,7 @@ module.exports = Reflux.createStore
       if task.id is id
         task.lastStart = moment().toISOString()
         task.isActive = false
-        task.timeslots.push(
+        task.sessions.push(
           start     : moment().toISOString()
           duration  : 0
         )

@@ -1,6 +1,4 @@
 ProjectsActions = require 'actions/projects'
-db              = require 'utils/storage'
-uuid            = require 'utils/uuid'
 
 module.exports  = Reflux.createStore
   listenables    : [ProjectsActions]
@@ -9,16 +7,14 @@ module.exports  = Reflux.createStore
     @projects or []
 
   init: ->
-    @projects =  db('projects') or []
+    @projects =  _.load('projects') or []
 
   update : ->
     @trigger(@projects)
-    console.log @projects
-    db('projects', @projects)
+    _.save(@projects, 'projects')
 
   onAdd : (params) ->
     @projects.push
-      id        : uuid()
       title     : params.title
       rate      : params.rate
       currency  : params.currency

@@ -7,8 +7,6 @@ module.exports = React.createClass
   mixins: [Reflux.connect(TasksStore, 'tasks')]
 
   tasksByDay : ->
-    db = new loki('Example')
-    console.log loki
     console.time('start')
     tasks = _.filter @state?.tasks, (task) =>
       moment(task.lastStart).isSame(@props.params.date, 'day') or

@@ -485,9 +485,7 @@ Dateribbon = require('components/dateribbon');
 module.exports = React.createClass({
   mixins: [Reflux.connect(TasksStore, 'tasks')],
   tasksByDay: function() {
-    var db, tasks, _ref;
-    db = new loki('Example');
-    console.log(loki);
+    var tasks, _ref;
     console.time('start');
     tasks = _.filter((_ref = this.state) != null ? _ref.tasks : void 0, (function(_this) {
       return function(task) {
@@ -549,13 +547,9 @@ ReactRouter.run(routes, function(Trakr) {
 });
 
 ;require.register("store/projects", function(exports, require, module) {
-var ProjectsActions, db, uuid;
+var ProjectsActions;
 
 ProjectsActions = require('actions/projects');
-
-db = require('utils/storage');
-
-uuid = require('utils/uuid');
 
 module.exports = Reflux.createStore({
   listenables: [ProjectsActions],
@@ -563,16 +557,14 @@ module.exports = Reflux.createStore({
     return this.projects || [];
   },
   init: function() {
-    return this.projects = db('projects') || [];
+    return this.projects = _.load('projects') || [];
   },
   update: function() {
     this.trigger(this.projects);
-    console.log(this.projects);
-    return db('projects', this.projects);
+    return _.save(this.projects, 'projects');
   },
   onAdd: function(params) {
     this.projects.push({
-      id: uuid(),
       title: params.title,
       rate: params.rate,
       currency: params.currency,
@@ -593,15 +585,11 @@ module.exports = Reflux.createStore({
 });
 
 ;require.register("store/tasks", function(exports, require, module) {
-var ProjectsActions, TasksActions, db, uuid;
+var ProjectsActions, TasksActions;
 
 TasksActions = require('actions/tasks');
 
 ProjectsActions = require('actions/projects');
-
-db = require('utils/storage');
-
-uuid = require('utils/uuid');
 
 module.exports = Reflux.createStore({
   listenables: [TasksActions],
@@ -609,21 +597,26 @@ module.exports = Reflux.createStore({
     return this.tasks || [];
   },
   init: function() {
-    this.tasks = db('tasks') || [];
+    this.tasks = _.load('tasks');
     return setInterval(((function(_this) {
       return function() {
         return _this.updateTimeslot();
       };
     })(this)), 1000);
   },
+  getSession: function(id, key) {
+    var task;
+    task = _.get(this.tasks, id);
+    return task.sessions[key] || [];
+  },
   update: function() {
     this.trigger(this.tasks);
-    return db('tasks', this.tasks);
+    return _.save(this.tasks, 'tasks');
   },
   updateTimeslot: function() {
     this.tasks = this.tasks.map(function(task) {
       if (task.isActive) {
-        task.timeslots[task.timeslots.length - 1].duration += 1;
+        task.sessions[task.sessions.length - 1].duration += 1;
       }
       return task;
     });
@@ -639,23 +632,21 @@ module.exports = Reflux.createStore({
       currency: params.currency,
       lastStart: moment().toISOString(),
       project: params.project,
-      timeslots: []
+      sessions: {}
     });
     ProjectsActions.addTask(params.project, id);
     return this.update();
   },
   onAddTimeslot: function(id) {
-    this.tasks = this.tasks.map(function(task) {
-      task.isActive = false;
-      if (task.id === id) {
-        task.lastStart = moment().toISOString();
-        task.isActive = true;
-        task.timeslots.push({
-          start: moment().toISOString(),
-          duration: 0
-        });
-      }
-      return task;
+    var key, task;
+    task = this.get(id);
+    key = moment().format('YYYY-MM-DD');
+    if (!task.sessions[key]) {
+      task.sessions[key] = [];
+    }
+    task.sessions[key].push({
+      duration: 0,
+      start: moment().toISOString()
     });
     return this.update();
   },
@@ -665,7 +656,7 @@ module.exports = Reflux.createStore({
       if (task.id === id) {
         task.lastStart = moment().toISOString();
         task.isActive = false;
-        task.timeslots.push({
+        task.sessions.push({
           start: moment().toISOString(),
           duration: 0
         });
@@ -718,34 +709,6 @@ module.exports = {
     }
     return newObj;
   }
-};
-});
-
-;require.register("utils/storage", function(exports, require, module) {
-module.exports = function(namespace, data) {
-  var store;
-  if (data) {
-    return localStorage.setItem(namespace, JSON.stringify(data));
-  }
-  store = localStorage.getItem(namespace);
-  return store && JSON.parse(store) || void 0;
-};
-});
-
-;require.register("utils/uuid", function(exports, require, module) {
-module.exports = function() {
-  var i, random, uuid;
-  uuid = '';
-  i = 0;
-  while (i < 32) {
-    random = Math.random() * 16 | 0;
-    if (i === 8 || i === 12 || i === 16 || i === 20) {
-      uuid += '-';
-    }
-    uuid += (i === 12 ? 4 : i === 16 ? random & 3 | 8 : random).toString(16);
-    i++;
-  }
-  return uuid;
 };
 });
 
