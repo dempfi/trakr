@@ -1,20 +1,21 @@
 TasksStore        = require 'store/tasks'
+TimeslotsStore    = require 'store/timeslots'
 TasksActions      = require 'actions/tasks'
 
 module.exports = React.createClass
   mixins: [
-    Reflux.connectFilter TasksStore, 'task', (tasks) ->
-      _.filter(tasks, 'id', @props.params.id)[0]
+    Reflux.connectFilter(TasksStore, 'task', (i) -> i[@props.params.id]),
+    Reflux.connectFilter(TimeslotsStore, 'timeslots', (i) -> i[@props.params.id]),
   ]
 
   start : ->
-    TasksActions.addTimeslot @state.task.id
+    TasksActions.addTimeslot @props.params.id
 
   stop : ->
-    TasksActions.stopTimeslot @state.task.id
+    TasksActions.stopTimeslot @props.params.id
 
   totalWorked : ->
-    @state.task.timeslots.reduce ((i, n) -> i + n.duration), 0
+    _.reduce @state.timeslots, ((c, i) -> i.duration + c), 0
 
   render : ->
     return (

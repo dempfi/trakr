@@ -109,12 +109,20 @@
   require.brunch = true;
   globals.require = require;
 })();
-require.register("actions/projects", function(exports, require, module) {
+require.register("actions/activity", function(exports, require, module) {
+module.exports = Reflux.createActions(['add']);
+});
+
+;require.register("actions/projects", function(exports, require, module) {
 module.exports = Reflux.createActions(['add', 'addTask']);
 });
 
 ;require.register("actions/tasks", function(exports, require, module) {
 module.exports = Reflux.createActions(['add', 'addTimeslot', 'stopTimeslot']);
+});
+
+;require.register("actions/timeslots", function(exports, require, module) {
+module.exports = Reflux.createActions(['add', 'update']);
 });
 
 ;require.register("app", function(exports, require, module) {
@@ -438,27 +446,31 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/task/index", function(exports, require, module) {
-var TasksActions, TasksStore;
+var TasksActions, TasksStore, TimeslotsStore;
 
 TasksStore = require('store/tasks');
+
+TimeslotsStore = require('store/timeslots');
 
 TasksActions = require('actions/tasks');
 
 module.exports = React.createClass({
   mixins: [
-    Reflux.connectFilter(TasksStore, 'task', function(tasks) {
-      return _.filter(tasks, 'id', this.props.params.id)[0];
+    Reflux.connectFilter(TasksStore, 'task', function(i) {
+      return i[this.props.params.id];
+    }), Reflux.connectFilter(TimeslotsStore, 'timeslots', function(i) {
+      return i[this.props.params.id];
     })
   ],
   start: function() {
-    return TasksActions.addTimeslot(this.state.task.id);
+    return TasksActions.addTimeslot(this.props.params.id);
   },
   stop: function() {
-    return TasksActions.stopTimeslot(this.state.task.id);
+    return TasksActions.stopTimeslot(this.props.params.id);
   },
   totalWorked: function() {
-    return this.state.task.timeslots.reduce((function(i, n) {
-      return i + n.duration;
+    return _.reduce(this.state.timeslots, (function(c, i) {
+      return i.duration + c;
     }), 0);
   },
   render: function() {
@@ -472,38 +484,32 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/timeline/index", function(exports, require, module) {
-var Dateribbon, ProjectsStore, TaskItem, TasksStore;
+var ActivityStore, Dateribbon, TaskItem, TasksStore;
 
 TasksStore = require('store/tasks');
 
-ProjectsStore = require('store/projects');
+ActivityStore = require('store/activity');
 
 TaskItem = require('components/taskItem');
 
 Dateribbon = require('components/dateribbon');
 
 module.exports = React.createClass({
-  mixins: [Reflux.connect(TasksStore, 'tasks')],
+  mixins: [Reflux.connect(TasksStore, 'tasks'), Reflux.connect(ActivityStore, 'activity')],
   tasksByDay: function() {
-    var tasks, _ref;
-    console.time('start');
-    tasks = _.filter((_ref = this.state) != null ? _ref.tasks : void 0, (function(_this) {
-      return function(task) {
-        return moment(task.lastStart).isSame(_this.props.params.date, 'day') || _.some(task.timeslots, function(slot) {
-          return moment(slot).isSame(_this.props.params.date, 'day');
+    return _.map(this.state.activity[this.props.params.date], (function(_this) {
+      return function(taskId) {
+        return React.createElement(TaskItem, {
+          "key": taskId,
+          "task": _this.state.tasks[taskId]
         });
       };
     })(this));
-    console.log(tasks);
-    console.timeEnd('start');
-    return '';
   },
   render: function() {
     return React.createElement("div", {
       "className": 'timeline'
-    }, React.createElement(Dateribbon, {
-      "onSelect": this.showByDate
-    }), this.tasksByDay());
+    }, React.createElement(Dateribbon, null), this.tasksByDay());
   }
 });
 });
@@ -546,6 +552,43 @@ ReactRouter.run(routes, function(Trakr) {
 });
 });
 
+;require.register("store/activity", function(exports, require, module) {
+var ActivityActions;
+
+ActivityActions = require('actions/activity');
+
+module.exports = Reflux.createStore({
+  listenables: [ActivityActions],
+  getInitialState: function() {
+    return this.activity || {};
+  },
+  init: function() {
+    return this.activity = _.load('activity') || {};
+  },
+  inform: function() {
+    this.trigger(this.activity);
+    return _.save(this.activity, 'activity');
+  },
+  get: function(key) {
+    return this.activity[key] || [];
+  },
+  set: function(key, day) {
+    return this.activity[key] = _.uniq(day);
+  },
+  todayKey: function() {
+    return moment().format('YYYY-MM-DD');
+  },
+  onAdd: function(taskId) {
+    var day, key;
+    key = this.todayKey();
+    day = this.get(key);
+    day.push(taskId);
+    this.set(key, day);
+    return this.inform();
+  }
+});
+});
+
 ;require.register("store/projects", function(exports, require, module) {
 var ProjectsActions;
 
@@ -554,116 +597,146 @@ ProjectsActions = require('actions/projects');
 module.exports = Reflux.createStore({
   listenables: [ProjectsActions],
   getInitialState: function() {
-    return this.projects || [];
+    return this.projects;
   },
   init: function() {
-    return this.projects = _.load('projects') || [];
+    return this.projects = _.load('projects') || {};
   },
-  update: function() {
+  inform: function() {
     this.trigger(this.projects);
     return _.save(this.projects, 'projects');
   },
-  onAdd: function(params) {
-    this.projects.push({
-      title: params.title,
-      rate: params.rate,
-      currency: params.currency,
-      tasks: []
+  get: function(id) {
+    return this.projects[id] || {};
+  },
+  set: function(id, project) {
+    return this.projects[id] = project;
+  },
+  onAdd: function(payload) {
+    var id, project;
+    id = _.createId();
+    project = _.merge(payload, {
+      tasks: [],
+      id: id
     });
-    return this.update();
+    this.set(id, project);
+    return this.inform();
   },
   onAddTask: function(id, task) {
-    this.projects = this.projects.map(function(project) {
-      if (project.id === id) {
-        project.tasks.push(task);
-      }
-      return project;
-    });
-    return this.update();
+    var project;
+    project = this.get(id);
+    project.tasks.push(task);
+    this.set(id, project);
+    return this.inform();
   }
 });
 });
 
 ;require.register("store/tasks", function(exports, require, module) {
-var ProjectsActions, TasksActions;
+var Activity, Projects, TasksActions, Timeslots;
 
 TasksActions = require('actions/tasks');
 
-ProjectsActions = require('actions/projects');
+Projects = require('actions/projects');
+
+Timeslots = require('actions/timeslots');
+
+Activity = require('actions/activity');
 
 module.exports = Reflux.createStore({
   listenables: [TasksActions],
   getInitialState: function() {
-    return this.tasks || [];
+    return this.tasks || {};
   },
   init: function() {
-    this.tasks = _.load('tasks');
+    this.tasks = _.load('tasks') || {};
+    this.activeTask = '';
     return setInterval(((function(_this) {
       return function() {
         return _this.updateTimeslot();
       };
     })(this)), 1000);
   },
-  getSession: function(id, key) {
-    var task;
-    task = _.get(this.tasks, id);
-    return task.sessions[key] || [];
-  },
-  update: function() {
+  inform: function() {
     this.trigger(this.tasks);
     return _.save(this.tasks, 'tasks');
   },
-  updateTimeslot: function() {
-    this.tasks = this.tasks.map(function(task) {
-      if (task.isActive) {
-        task.sessions[task.sessions.length - 1].duration += 1;
-      }
-      return task;
-    });
-    return this.update();
+  get: function(id) {
+    return this.tasks[id] || {};
   },
-  onAdd: function(params) {
+  set: function(id, task) {
+    return this.tasks[id] = task;
+  },
+  onAdd: function(payload) {
     var id;
-    id = uuid();
-    this.tasks.push({
-      id: id,
-      title: params.title,
-      rate: params.rate,
-      currency: params.currency,
-      lastStart: moment().toISOString(),
-      project: params.project,
-      sessions: {}
-    });
-    ProjectsActions.addTask(params.project, id);
-    return this.update();
+    id = _.createId();
+    this.set(id, _.merge(payload, {
+      id: id
+    }));
+    Projects.addTask(payload.project, id);
+    Activity.add(id);
+    return this.inform();
+  },
+  updateTimeslot: function() {
+    if (!this.activeTask) {
+      return;
+    }
+    Timeslots.update(this.activeTask);
+    Activity.add(this.activeTask);
+    return this.inform();
   },
   onAddTimeslot: function(id) {
-    var key, task;
-    task = this.get(id);
-    key = moment().format('YYYY-MM-DD');
-    if (!task.sessions[key]) {
-      task.sessions[key] = [];
-    }
-    task.sessions[key].push({
-      duration: 0,
-      start: moment().toISOString()
-    });
-    return this.update();
+    this.activeTask = id;
+    Timeslots.add(id);
+    Activity.add(id);
+    return this.inform();
   },
-  onStopTimeslot: function(id) {
-    this.tasks = this.tasks.map(function(task) {
-      task.isActive = false;
-      if (task.id === id) {
-        task.lastStart = moment().toISOString();
-        task.isActive = false;
-        task.sessions.push({
-          start: moment().toISOString(),
-          duration: 0
-        });
-      }
-      return task;
+  onStopTimeslot: function() {
+    this.activeTask = '';
+    return this.inform();
+  }
+});
+});
+
+;require.register("store/timeslots", function(exports, require, module) {
+var TimeslotsActions;
+
+TimeslotsActions = require('actions/timeslots');
+
+module.exports = Reflux.createStore({
+  listenables: [TimeslotsActions],
+  getInitialState: function() {
+    return this.timeslots || {};
+  },
+  init: function() {
+    return this.timeslots = _.load('timeslots') || {};
+  },
+  inform: function() {
+    this.trigger(this.timeslots);
+    return _.save(this.timeslots, 'timeslots');
+  },
+  get: function(key) {
+    return this.timeslots[key] || [];
+  },
+  set: function(key, taskTimeslots) {
+    return this.timeslots[key] = taskTimeslots;
+  },
+  onAdd: function(taskId) {
+    var taskTimeslots;
+    taskTimeslots = this.get(taskId);
+    taskTimeslots.push({
+      start: moment().toISOString(),
+      duration: 0
     });
-    return this.update();
+    this.set(taskId, taskTimeslots);
+    return this.inform();
+  },
+  onUpdate: function(taskId) {
+    var taskTimeslots;
+    taskTimeslots = this.get(taskId);
+    taskTimeslots[taskTimeslots.length - 1].duration += 1;
+    this.set(taskId, taskTimeslots);
+    return this.inform();
   }
 });
 });
