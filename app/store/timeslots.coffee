@@ -1,4 +1,4 @@
-TimeslotsActions  = require 'actions/timeslots'
+TimeslotsActions = require 'actions/timeslots'
 
 module.exports = Reflux.createStore
   listenables    : [TimeslotsActions]

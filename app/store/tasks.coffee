@@ -4,14 +4,14 @@ Timeslots    = require 'actions/timeslots'
 Activity     = require 'actions/activity'
 
 module.exports = Reflux.createStore
-  listenables    : [TasksActions]
+  listenables : [TasksActions]
 
   getInitialState : ->
     @tasks or {}
 
   init: ->
-    @tasks =  _.load('tasks') or {}
-    @activeTask = ''
+    @tasks      = _.load('tasks') or {}
+    @activeTask = null
     setInterval (=> @updateTimeslot()), 1000
 
   inform : ->
@@ -44,5 +44,5 @@ module.exports = Reflux.createStore
     @inform()
 
   onStopTimeslot : ->
-    @activeTask = ''
+    @activeTask = null
     @inform()

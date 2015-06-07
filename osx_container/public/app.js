@@ -661,7 +661,7 @@ module.exports = Reflux.createStore({
   },
   init: function() {
     this.tasks = _.load('tasks') || {};
-    this.activeTask = '';
+    this.activeTask = null;
     return setInterval(((function(_this) {
       return function() {
         return _this.updateTimeslot();
@@ -703,7 +703,7 @@ module.exports = Reflux.createStore({
     return this.inform();
   },
   onStopTimeslot: function() {
-    this.activeTask = '';
+    this.activeTask = null;
     return this.inform();
   }
 });

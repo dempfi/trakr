@@ -4,7 +4,6 @@ module.exports = React.createClass
     value       : ''
     activeItem  : {}
 
-
   onChange : (e) ->
     value         = e.target.value
     reg           = new RegExp("^#{value}", 'i')
@@ -13,8 +12,8 @@ module.exports = React.createClass
       list    : filteredList
       value   : value
 
-
   handleFocus : -> @setState isOpen : true
+
   handleBlur  : ->
     setTimeout =>
       @setState isOpen : false
@@ -65,7 +64,8 @@ module.exports = React.createClass
       <li
         className = {classNames(styles)}
         key       = {item[@props.valueKey]}
-        onClick   = {@selectItem.bind(@, item)}>
+        onClick   = {@selectItem.bind(@, item)}
+      >
         {item[@props.titleKey]}
       </li>
     )
@@ -79,11 +79,11 @@ module.exports = React.createClass
     return (
       <div className='autocomplete'>
         <input
-          value       = {@state.value}
-          onChange    = {@onChange}
-          onKeyDown   = {@handleKeyDown}
-          onFocus     = {@handleFocus}
-          onBlur      = {@handleBlur}
+          value     = {@state.value}
+          onChange  = {@onChange}
+          onKeyDown = {@handleKeyDown}
+          onFocus   = {@handleFocus}
+          onBlur    = {@handleBlur}
         />
         <ul className = {classNames(listClasses)}>
           {@state.list?.map (item) => @renderItem(item)}

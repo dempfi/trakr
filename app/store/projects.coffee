@@ -1,7 +1,7 @@
 ProjectsActions = require 'actions/projects'
 
 module.exports  = Reflux.createStore
-  listenables    : [ProjectsActions]
+  listenables : [ProjectsActions]
 
   getInitialState : ->
     @projects

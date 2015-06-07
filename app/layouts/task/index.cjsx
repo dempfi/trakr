@@ -1,8 +1,8 @@
-TasksStore        = require 'store/tasks'
-TimeslotsStore    = require 'store/timeslots'
-ProjectsStore     = require 'store/projects'
-TasksActions      = require 'actions/tasks'
-hhmm              = require 'utils/formatSeconds'
+TasksStore     = require 'store/tasks'
+TimeslotsStore = require 'store/timeslots'
+ProjectsStore  = require 'store/projects'
+TasksActions   = require 'actions/tasks'
+hhmm           = require 'utils/formatSeconds'
 
 module.exports = React.createClass
   mixins: [

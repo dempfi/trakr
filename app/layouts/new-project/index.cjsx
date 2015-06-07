@@ -1,12 +1,12 @@
-ProjectsActions    = require 'actions/projects'
+ProjectsActions = require 'actions/projects'
 
 module.exports = React.createClass
 
   getInitialState : ->
     return {
-      title       : ''
-      rate        : ''
-      currency    : '$'
+      title    : ''
+      rate     : ''
+      currency : '$'
     }
 
   addProject : ->
@@ -19,22 +19,22 @@ module.exports = React.createClass
 
   render : ->
     return (
-      <div className='new-task'>
+      <div className = 'new-task'>
         <input
-          value={@state.title}
-          onChange={@onChange.bind(@,'title')}
-          placeholder='title'
+          value       = {@state.title}
+          onChange    = {@onChange.bind(@,'title')}
+          placeholder = 'title'
         /><br/>
         <input
-          value={@state.rate}
-          onChange={@onChange.bind(@,'rate')}
-          placeholder='default rate'
+          value       = {@state.rate}
+          onChange    = {@onChange.bind(@,'rate')}
+          placeholder = 'default rate'
         /><br/>
         <input
-          value={@state.project}
-          onChange={@onChange.bind(@,'currency')}
-          placeholder='currency'
+          value       = {@state.project}
+          onChange    = {@onChange.bind(@,'currency')}
+          placeholder = 'currency'
         /><br/>
-        <button onClick={@addProject}>add project</button>
+        <button onClick = {@addProject}>add project</button>
       </div>
     )

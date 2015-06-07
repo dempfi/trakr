@@ -9,13 +9,13 @@ module.exports = React.createClass
 
   getInitialState : ->
     return {
-      title       : ''
-      project     : ''
-      rate        : 0
-      currency    : '$'
-      estimate    : ''
-      deadline    : ''
-      complexity  : 0
+      title      : ''
+      project    : ''
+      rate       : 0
+      currency   : '$'
+      estimate   : ''
+      deadline   : ''
+      complexity : 0
     }
 
   addTask : ->
@@ -27,7 +27,7 @@ module.exports = React.createClass
     @setState 'project' : i.id
 
   onChange : (key ,e) ->
-    obj = {}
+    obj      = {}
     obj[key] = e.target.value
     @setState obj
 
@@ -35,24 +35,24 @@ module.exports = React.createClass
     return (
       <div className='new-task'>
         <input
-          value={@state.title}
-          onChange={@onChange.bind(@,'title')}
-          placeholder='title'
+          value       = {@state.title}
+          onChange    = {@onChange.bind(@,'title')}
+          placeholder = 'title'
         /><br/>
         <Autocomplete
-          list={@state.projects}
-          valueKey='id'
-          titleKey='title'
-          onSelect={@projectSelect}
+          list     = {@state.projects}
+          valueKey = 'id'
+          titleKey = 'title'
+          onSelect = {@projectSelect}
         />
         <input
-          value={@state.rate}
-          onChange={@onChange.bind(@,'rate')}
-          placeholder='rate'
+          value       = {@state.rate}
+          onChange    = {@onChange.bind(@,'rate')}
+          placeholder = 'rate'
         /><br/>
-        <input value={@state.currency} placeholder='currency' readOnly/><br/>
-        <input placeholder='estimate' readOnly/><br/>
-        <input placeholder='deadline' readOnly/><br/>
+        <input value = {@state.currency} placeholder ='currency' readOnly/><br/>
+        <input placeholder = 'estimate' readOnly/><br/>
+        <input placeholder = 'deadline' readOnly/><br/>
         <input
           value={@state.complexity}
           onChange={@onChange.bind(@,'complexity')}

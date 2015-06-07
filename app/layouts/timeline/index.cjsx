@@ -1,7 +1,7 @@
-TasksStore      = require 'store/tasks'
-ActivityStore   = require 'store/activity'
-TaskItem        = require 'components/taskItem'
-Dateribbon      = require 'components/dateribbon'
+TasksStore    = require 'store/tasks'
+ActivityStore = require 'store/activity'
+TaskItem      = require 'components/taskItem'
+Dateribbon    = require 'components/dateribbon'
 
 module.exports = React.createClass
   mixins: [
