@@ -1,5 +1,18 @@
 module.exports = React.createClass
 
+  propTypes :
+    onFilter    : React.PropTypes.func
+    onSelect    : React.PropTypes.func
+    renderItem  : React.PropTypes.func
+    list        : React.PropTypes.oneOfType [
+                    React.PropTypes.array
+                    React.PropTypes.object
+                  ]
+    titleKey    : React.PropTypes.string
+    valueKey    : React.PropTypes.string
+    placeholder : React.PropTypes.string
+
+
   getInitialState : ->
     value       : ''
     activeItem  : {}
@@ -7,7 +20,11 @@ module.exports = React.createClass
   onChange : (e) ->
     value         = e.target.value
     reg           = new RegExp("^#{value}", 'i')
-    filteredList  = _.filter @props.list, (i) => reg.test i[@props.titleKey]
+    filteredList  = _.filter @props.list, (i) =>
+      return @props.onFilter(value, i) if @props.onFilter
+      reg.test(i[@props.titleKey]) or
+      reg.test(i[@props.valueKey])
+
     @setState
       list    : filteredList
       value   : value
@@ -18,6 +35,7 @@ module.exports = React.createClass
     setTimeout =>
       @setState isOpen : false
     , 10
+
   handleEnter : ->
     @selectItem @state.activeItem
     @setState isOpen : false
@@ -25,7 +43,7 @@ module.exports = React.createClass
 
   selectItem : (item) ->
     @setState value : item[@props.titleKey]
-    @props.onSelect(item)
+    @props.onSelect(item[@props.valueKey], item)
 
 
   handleKeyDown : (e) ->
@@ -79,11 +97,12 @@ module.exports = React.createClass
     return (
       <div className='autocomplete'>
         <input
-          value     = {@state.value}
-          onChange  = {@onChange}
-          onKeyDown = {@handleKeyDown}
-          onFocus   = {@handleFocus}
-          onBlur    = {@handleBlur}
+          value       = {@state.value}
+          onChange    = {@onChange}
+          onKeyDown   = {@handleKeyDown}
+          onFocus     = {@handleFocus}
+          onBlur      = {@handleBlur}
+          placeholder = {@props.placeholder}
         />
         <ul className = {classNames(listClasses)}>
           {@state.list?.map (item) => @renderItem(item)}

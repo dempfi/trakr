@@ -3,33 +3,36 @@ TasksActions      = require 'actions/tasks'
 ProjectsActions   = require 'actions/projects'
 ProjectsStore     = require 'store/projects'
 Autocomplete      = require 'components/autocomplete'
+Currencies        = require 'utils/currencies'
 
 module.exports = React.createClass
   mixins: [Reflux.connect(ProjectsStore, 'projects')]
 
   getInitialState : ->
-    return {
-      title      : ''
-      project    : ''
-      rate       : 0
-      currency   : '$'
-      estimate   : ''
-      deadline   : ''
-      complexity : 0
-    }
+    title      : ''
+    project    : ''
+    rate       : 0
+    currency   : ''
+    estimate   : ''
+    deadline   : ''
+    complexity : 0
 
   addTask : ->
     state = @state
     delete state.projects
     TasksActions.add state
 
-  projectSelect : (i) ->
-    @setState 'project' : i.id
+  projectSelect : (val) ->
+    @setState 'project' : val
 
   onChange : (key ,e) ->
     obj      = {}
     obj[key] = e.target.value
     @setState obj
+
+  currencySelect : (val) ->
+    @setState 'currency' : val
+
 
   render : ->
     return (
@@ -40,17 +43,24 @@ module.exports = React.createClass
           placeholder = 'title'
         /><br/>
         <Autocomplete
-          list     = {@state.projects}
-          valueKey = 'id'
-          titleKey = 'title'
-          onSelect = {@projectSelect}
+          list        = {@state.projects}
+          valueKey    = 'id'
+          titleKey    = 'title'
+          onSelect    = {@projectSelect}
+          placeholder = 'project'
         />
         <input
           value       = {@state.rate}
           onChange    = {@onChange.bind(@,'rate')}
           placeholder = 'rate'
         /><br/>
-        <input value = {@state.currency} placeholder ='currency' readOnly/><br/>
+        <Autocomplete
+          list        = {Currencies()}
+          valueKey    = 'currency'
+          titleKey    = 'name'
+          onSelect    = {@currencySelect}
+          placeholder = 'currency'
+        />
         <input placeholder = 'estimate' readOnly/><br/>
         <input placeholder = 'deadline' readOnly/><br/>
         <input
