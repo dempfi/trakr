@@ -286,18 +286,21 @@ module.exports = React.createClass({
     }
     return array;
   },
-  date: function(m) {
+  date: function(date, i) {
     return React.createElement(Link, {
+      "key": i,
       "to": 'timeline',
       "params": {
-        date: m.format('YYYY-MM-DD')
+        date: date
       }
-    }, m.format('D ddd'));
+    }, moment(date).format('D ddd'));
   },
   render: function() {
-    return React.createElement("ul", null, this.generateArray().map((function(_this) {
-      return function(m) {
-        return _this.date(m);
+    var dates;
+    dates = this.props.dates.sort().reverse();
+    return React.createElement("ul", null, _.map(dates, (function(_this) {
+      return function(d, i) {
+        return _this.date(d, i);
       };
     })(this)), " ");
   }
@@ -446,13 +449,17 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/task/index", function(exports, require, module) {
-var TasksActions, TasksStore, TimeslotsStore;
+var ProjectsStore, TasksActions, TasksStore, TimeslotsStore, hhmm;
 
 TasksStore = require('store/tasks');
 
 TimeslotsStore = require('store/timeslots');
 
+ProjectsStore = require('store/projects');
+
 TasksActions = require('actions/tasks');
+
+hhmm = require('utils/formatSeconds');
 
 module.exports = React.createClass({
   mixins: [
@@ -468,13 +475,15 @@ module.exports = React.createClass({
   stop: function() {
     return TasksActions.stopTimeslot(this.props.params.id);
   },
-  totalWorked: function() {
-    return _.reduce(this.state.timeslots, (function(c, i) {
+  worked: function() {
+    return hhmm(_.reduce(this.state.timeslots, (function(c, i) {
       return i.duration + c;
-    }), 0);
+    }), 0));
   },
   render: function() {
-    return React.createElement("div", null, this.state.task.title, React.createElement("br", null), this.state.task.rate, this.state.task.currency, React.createElement("br", null), "worked : ", this.totalWorked(), "s", React.createElement("br", null), "earned : ", this.totalWorked() / 3600 * this.state.task.rate, this.state.task.currency, React.createElement("br", null), React.createElement("button", {
+    var worked;
+    worked = this.worked();
+    return React.createElement("div", null, this.state.task.title, React.createElement("br", null), this.state.task.rate, this.state.task.currency, React.createElement("br", null), "worked : ", worked[0], "h ", worked[1], "m ", worked[2], "s", React.createElement("br", null), "earned : ", worked[3] / 3600 * this.state.task.rate, this.state.task.currency, React.createElement("br", null), React.createElement("button", {
       "onClick": this.start
     }, "Start"), React.createElement("button", {
       "onClick": this.stop
@@ -509,7 +518,9 @@ module.exports = React.createClass({
   render: function() {
     return React.createElement("div", {
       "className": 'timeline'
-    }, React.createElement(Dateribbon, null), this.tasksByDay());
+    }, React.createElement(Dateribbon, {
+      "dates": _.keys(this.state.activity)
+    }), this.tasksByDay());
   }
 });
 });
@@ -741,47 +752,13 @@ module.exports = Reflux.createStore({
 });
 });
 
-;require.register("utils", function(exports, require, module) {
-module.exports = {
-  uuid: function() {
-    var i, random, uuid;
-    i = void 0;
-    random = void 0;
-    uuid = '';
-    i = 0;
-    while (i < 32) {
-      random = Math.random() * 16 | 0;
-      if (i === 8 || i === 12 || i === 16 || i === 20) {
-        uuid += '-';
-      }
-      uuid += (i === 12 ? 4 : i === 16 ? random & 3 | 8 : random).toString(16);
-      i++;
-    }
-    return uuid;
-  },
-  store: function(namespace, data) {
-    var store;
-    if (data) {
-      return localStorage.setItem(namespace, JSON.stringify(data));
-    }
-    store = localStorage.getItem(namespace);
-    return store && JSON.parse(store) || [];
-  },
-  extend: function() {
-    var i, key, newObj, obj;
-    newObj = {};
-    i = 0;
-    while (i < arguments.length) {
-      obj = arguments[i];
-      for (key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          newObj[key] = obj[key];
-        }
-      }
-      i++;
-    }
-    return newObj;
-  }
+;require.register("utils/formatSeconds", function(exports, require, module) {
+module.exports = function(total) {
+  var hours, minutes, seconds;
+  hours = Math.floor(total / 3600);
+  minutes = Math.floor((total - hours * 3600) / 60);
+  seconds = total - hours * 3600 - minutes * 60;
+  return [hours, minutes, seconds, total];
 };
 });
 

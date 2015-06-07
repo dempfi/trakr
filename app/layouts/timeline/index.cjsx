@@ -17,7 +17,7 @@ module.exports = React.createClass
   render : ->
     return (
       <div className='timeline'>
-        <Dateribbon />
+        <Dateribbon dates={_.keys @state.activity}/>
         {@tasksByDay()}
       </div>
     )
