@@ -285,6 +285,93 @@ module.exports = React.createClass({
 });
 });
 
+;require.register("components/datepicker/index", function(exports, require, module) {
+var Month, ToTuple;
+
+ToTuple = require('utils/momentToTuple');
+
+Month = require('components/datepicker/month');
+
+module.exports = React.createClass({
+  getInitialState: function() {
+    return {
+      currentMonth: ToTuple(moment())
+    };
+  },
+  incrementMonth: function(inc) {
+    var d, m, y, _ref;
+    _ref = this.state.currentMonth, y = _ref[0], m = _ref[1], d = _ref[2];
+    if (m + inc > 11) {
+      m = 0;
+      y += 1;
+    } else if (m + inc < 0) {
+      m = 11;
+      y -= 1;
+    } else {
+      m += inc;
+    }
+    return this.setState({
+      currentMonth: [y, m, d]
+    });
+  },
+  onSelect: function(d) {
+    var curM, curY, _ref;
+    _ref = this.state.currentMonth, curY = _ref[0], curM = _ref[1];
+    if (d[0] !== curY || d[1] !== curM) {
+      return;
+    }
+    return this.props.onSelect(moment(d).format('YYYY-MM-DD'), moment(d));
+  },
+  render: function() {
+    var title;
+    title = moment(this.state.currentMonth).format('MMMM YYYY');
+    return React.createElement("div", null, React.createElement("div", null, React.createElement("span", {
+      "onClick": this.incrementMonth.bind(this, -1)
+    }, "prev"), React.createElement("span", null, title), React.createElement("span", {
+      "onClick": this.incrementMonth.bind(this, 1)
+    }, "next")), React.createElement(Month, {
+      "month": this.state.currentMonth,
+      "onSelect": this.onSelect
+    }));
+  }
+});
+});
+
+;require.register("components/datepicker/month", function(exports, require, module) {
+var ToTuple;
+
+ToTuple = require('utils/momentToTuple');
+
+module.exports = React.createClass({
+  getMonth: function() {
+    var end, month, ret, start;
+    month = this.props.month;
+    start = moment(month).startOf('month').startOf('week');
+    end = moment(month).endOf('month').endOf('week');
+    ret = [];
+    moment.range(start, end).by('day', (function(_this) {
+      return function(date) {
+        return ret.push(ToTuple(date));
+      };
+    })(this));
+    return ret;
+  },
+  renderDate: function(day) {
+    return React.createElement("li", {
+      "key": day.join('-'),
+      "onClick": this.props.onSelect.bind(null, day)
+    }, day[2]);
+  },
+  render: function() {
+    return React.createElement("ul", null, _.map(this.getMonth(), (function(_this) {
+      return function(date) {
+        return _this.renderDate(date);
+      };
+    })(this)));
+  }
+});
+});
+
 ;require.register("components/dateribbon", function(exports, require, module) {
 var Link;
 
@@ -382,7 +469,7 @@ module.exports = React.createClass({
 });
 
 ;require.register("layouts/new-task/index", function(exports, require, module) {
-var Autocomplete, Currencies, ProjectsActions, ProjectsStore, TasksActions, TasksStore;
+var Autocomplete, Currencies, Datepicker, ProjectsActions, ProjectsStore, TasksActions, TasksStore;
 
 TasksStore = require('store/tasks');
 
@@ -395,6 +482,8 @@ ProjectsStore = require('store/projects');
 Autocomplete = require('components/autocomplete');
 
 Currencies = require('utils/currencies');
+
+Datepicker = require('components/datepicker');
 
 module.exports = React.createClass({
   mixins: [Reflux.connect(ProjectsStore, 'projects')],
@@ -431,6 +520,11 @@ module.exports = React.createClass({
       'currency': val
     });
   },
+  dateSelect: function(val) {
+    return this.setState({
+      'deadline': val
+    });
+  },
   render: function() {
     return React.createElement("div", {
       "className": 'new-task'
@@ -459,8 +553,11 @@ module.exports = React.createClass({
       "readOnly": true
     }), React.createElement("br", null), React.createElement("input", {
       "placeholder": 'deadline',
+      "value": this.state.deadline,
       "readOnly": true
-    }), React.createElement("br", null), React.createElement("input", {
+    }), React.createElement("br", null), React.createElement(Datepicker, {
+      "onSelect": this.dateSelect
+    }), React.createElement("input", {
       "value": this.state.complexity,
       "onChange": this.onChange.bind(this, 'complexity'),
       "placeholder": 'complexity'
@@ -1414,6 +1511,12 @@ module.exports = function(total) {
   minutes = Math.floor((total - hours * 3600) / 60);
   seconds = total - hours * 3600 - minutes * 60;
   return [hours, minutes, seconds, total];
+};
+});
+
+;require.register("utils/momentToTuple", function(exports, require, module) {
+module.exports = function(moment) {
+  return [moment.get('year'), moment.get('month'), moment.get('date')];
 };
 });
 

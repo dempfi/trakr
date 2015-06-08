@@ -4,6 +4,7 @@ ProjectsActions   = require 'actions/projects'
 ProjectsStore     = require 'store/projects'
 Autocomplete      = require 'components/autocomplete'
 Currencies        = require 'utils/currencies'
+Datepicker        = require 'components/datepicker'
 
 module.exports = React.createClass
   mixins: [Reflux.connect(ProjectsStore, 'projects')]
@@ -33,6 +34,8 @@ module.exports = React.createClass
   currencySelect : (val) ->
     @setState 'currency' : val
 
+  dateSelect : (val) ->
+    @setState 'deadline' : val
 
   render : ->
     return (
@@ -62,7 +65,12 @@ module.exports = React.createClass
           placeholder = 'currency'
         />
         <input placeholder = 'estimate' readOnly/><br/>
-        <input placeholder = 'deadline' readOnly/><br/>
+        <input
+          placeholder = 'deadline'
+          value={@state.deadline}
+          readOnly/><br/>
+        <Datepicker onSelect={@dateSelect}/>
+
         <input
           value={@state.complexity}
           onChange={@onChange.bind(@,'complexity')}
