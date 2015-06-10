@@ -27,52 +27,47 @@ module.exports = React.createClass
     @setState obj
 
   render : ->
-    return (
-      <div className='-screen new-task'>
-        <header>
-          <p>New task</p>
-        </header>
-        <input
-          value       = {@state.title}
-          onChange    = {@onChange.bind(@,'title')}
-          placeholder = 'title'
-        /><br/>
-        <Autocomplete
-          list        = {@state.projects}
-          valueKey    = 'id'
-          titleKey    = 'title'
-          onSelect    = {@onChange.bind(@, 'project')}
-          placeholder = 'project'
-        />
-        <input
-          value       = {@state.rate}
-          onChange    = {@onChange.bind(@, 'rate')}
-          placeholder = 'rate'
-        /><br/>
-        <Autocomplete
-          list        = {Currencies()}
-          valueKey    = 'currency'
-          titleKey    = 'name'
-          onSelect    = {@onChange.bind(@, 'currency')}
-          placeholder = 'currency'
-        />
-        <input placeholder = 'estimate' readOnly/><br/>
-        <input
-          placeholder = 'deadline'
-          value={@state.deadline}
-          readOnly/><br/>
-        <Datepicker
-          onSelect = {@onChange.bind(@, 'deadline')}
-          selected = {@state.deadline}
-        />
-        <input
-          type     = 'range'
-          value    = {@state.complexity}
-          onChange = {@onChange.bind(@, 'complexity')}
-          min      = {0}
-          step     = {1}
-          max      = {10}
-        /><br/>
-        <button onClick={@addTask}>add task</button>
-      </div>
-    )
+    <div className='-screen new-task'>
+      <header>
+        <p>New task</p>
+      </header>
+      <input
+        value       = {@state.title}
+        onChange    = {@onChange.bind(@,'title')}
+        placeholder = 'title'
+      /><br/>
+      <Autocomplete
+        list        = {@state.projects}
+        valueKey    = 'id'
+        titleKey    = 'title'
+        onSelect    = {@onChange.bind(@, 'project')}
+        placeholder = 'project'
+      />
+      <input
+        value       = {@state.rate}
+        onChange    = {@onChange.bind(@, 'rate')}
+        placeholder = 'rate'
+      /><br/>
+      <Autocomplete
+        list        = {Currencies()}
+        valueKey    = 'currency'
+        titleKey    = 'name'
+        onSelect    = {@onChange.bind(@, 'currency')}
+        placeholder = 'currency'
+      />
+      <input placeholder = 'estimate' readOnly/><br/>
+      <Datepicker
+        onSelect = {@onChange.bind(@, 'deadline')}
+        selected = {@state.deadline}
+      />
+      <input
+        type     = 'range'
+        value    = {@state.complexity}
+        onChange = {@onChange.bind(@, 'complexity')}
+        min      = {0}
+        step     = {1}
+        max      = {10}
+      /><br/>
+      <button onClick={@addTask}>add task</button>
+    </div>
+

@@ -297,10 +297,12 @@ Month = require('components/datepicker/month');
 module.exports = React.createClass({
   getInitialState: function() {
     return {
-      currentMonth: ToTuple(moment())
+      currentMonth: ToTuple(moment()),
+      isOpen: false,
+      isHideable: true
     };
   },
-  incrementMonth: function(inc) {
+  setMonth: function(inc) {
     var d, m, y, _ref;
     _ref = this.state.currentMonth, y = _ref[0], m = _ref[1], d = _ref[2];
     if (m + inc > 11) {
@@ -316,30 +318,71 @@ module.exports = React.createClass({
       currentMonth: [y, m, d]
     });
   },
-  onSelect: function(d) {
-    var curM, curY, _ref;
-    _ref = this.state.currentMonth, curY = _ref[0], curM = _ref[1];
-    if (d[0] !== curY || d[1] !== curM) {
+  onSelect: function(date) {
+    var curMonth, curYear, _ref;
+    _ref = this.state.currentMonth, curYear = _ref[0], curMonth = _ref[1];
+    if (date[0] !== curYear || date[1] !== curMonth) {
       return;
     }
-    return this.props.onSelect(moment(d).format('YYYY-MM-DD'), moment(d));
+    this.props.onSelect(moment(date).format('YYYY-MM-DD'));
+    return this.hide();
+  },
+  hide: function() {
+    return this.setState({
+      'isOpen': false
+    });
+  },
+  show: function() {
+    return this.setState({
+      'isOpen': true
+    });
+  },
+  handleBlur: function() {
+    if (this.state.isHideable) {
+      return this.hide();
+    }
+  },
+  mouseDown: function() {
+    this.setState({
+      'isHideable': false
+    });
+    return React.findDOMNode(this.refs.input).focus();
+  },
+  mouseUp: function() {
+    this.setState({
+      'isHideable': true
+    });
+    return React.findDOMNode(this.refs.input).focus();
   },
   render: function() {
-    var title;
-    title = moment(this.state.currentMonth).format('MMMM YYYY');
-    return React.createElement("div", {
-      "className": '-datepicker'
+    var isActive, title;
+    title = moment(this.state.currentMonth);
+    isActive = {
+      active: this.state.isOpen
+    };
+    return React.createElement("div", null, React.createElement("span", {
+      "ref": 'input',
+      "className": classNames('input', isActive),
+      "onFocus": this.show,
+      "onClick": this.show,
+      "onBlur": this.handleBlur,
+      "children": this.props.selected,
+      "tabIndex": '1'
+    }), React.createElement("div", {
+      "className": classNames('-datepicker', isActive),
+      "onMouseDown": this.mouseDown,
+      "onMouseUp": this.mouseUp
     }, React.createElement("div", {
       "className": 'header'
     }, React.createElement("span", {
-      "onClick": this.incrementMonth.bind(this, -1)
-    }, "prev"), React.createElement("span", null, title), React.createElement("span", {
-      "onClick": this.incrementMonth.bind(this, 1)
+      "onClick": this.setMonth.bind(this, -1)
+    }, "prev"), React.createElement("span", null, title.format('MMMM YYYY')), React.createElement("span", {
+      "onClick": this.setMonth.bind(this, 1)
     }, "next")), React.createElement(Month, {
       "month": this.state.currentMonth,
       "onSelect": this.onSelect,
       "selected": this.props.selected
-    }));
+    })));
   }
 });
 });
@@ -547,10 +590,6 @@ module.exports = React.createClass({
       "placeholder": 'currency'
     }), React.createElement("input", {
       "placeholder": 'estimate',
-      "readOnly": true
-    }), React.createElement("br", null), React.createElement("input", {
-      "placeholder": 'deadline',
-      "value": this.state.deadline,
       "readOnly": true
     }), React.createElement("br", null), React.createElement(Datepicker, {
       "onSelect": this.onChange.bind(this, 'deadline'),
