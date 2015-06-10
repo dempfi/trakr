@@ -133,7 +133,9 @@ Link = ReactRouter.Link;
 module.exports = React.createClass({
   render: function() {
     return React.createElement("div", {
-      "className": 'APP'
+      "className": '-app'
+    }, React.createElement("div", {
+      "className": 'dev-menu'
     }, React.createElement(Link, {
       "to": 'timeline',
       "params": {
@@ -143,7 +145,7 @@ module.exports = React.createClass({
       "to": 'new-task'
     }, "new task"), " |", React.createElement(Link, {
       "to": 'new-project'
-    }, "new project"), React.createElement("hr", null), React.createElement(ReactRouter.RouteHandler, null));
+    }, "new project")), React.createElement(ReactRouter.RouteHandler, null));
   }
 });
 });
@@ -325,13 +327,18 @@ module.exports = React.createClass({
   render: function() {
     var title;
     title = moment(this.state.currentMonth).format('MMMM YYYY');
-    return React.createElement("div", null, React.createElement("div", null, React.createElement("span", {
+    return React.createElement("div", {
+      "className": '-datepicker'
+    }, React.createElement("div", {
+      "className": 'header'
+    }, React.createElement("span", {
       "onClick": this.incrementMonth.bind(this, -1)
     }, "prev"), React.createElement("span", null, title), React.createElement("span", {
       "onClick": this.incrementMonth.bind(this, 1)
     }, "next")), React.createElement(Month, {
       "month": this.state.currentMonth,
-      "onSelect": this.onSelect
+      "onSelect": this.onSelect,
+      "selected": this.props.selected
     }));
   }
 });
@@ -357,8 +364,16 @@ module.exports = React.createClass({
     return ret;
   },
   renderDate: function(day) {
+    var className;
+    if (day[1] !== this.props.month[1]) {
+      className = 'other-month';
+    }
+    if (moment(day).format('YYYY-MM-DD') === this.props.selected) {
+      className = 'active';
+    }
     return React.createElement("li", {
       "key": day.join('-'),
+      "className": className,
       "onClick": this.props.onSelect.bind(null, day)
     }, day[2]);
   },
@@ -499,36 +514,18 @@ module.exports = React.createClass({
     };
   },
   addTask: function() {
-    var state;
-    state = this.state;
-    delete state.projects;
-    return TasksActions.add(state);
-  },
-  projectSelect: function(val) {
-    return this.setState({
-      'project': val
-    });
+    return TasksActions.add(this.state);
   },
   onChange: function(key, e) {
-    var obj;
+    var obj, _ref;
     obj = {};
-    obj[key] = e.target.value;
+    obj[key] = ((_ref = e.target) != null ? _ref.value : void 0) || e;
     return this.setState(obj);
-  },
-  currencySelect: function(val) {
-    return this.setState({
-      'currency': val
-    });
-  },
-  dateSelect: function(val) {
-    return this.setState({
-      'deadline': val
-    });
   },
   render: function() {
     return React.createElement("div", {
-      "className": 'new-task'
-    }, React.createElement("input", {
+      "className": '-screen new-task'
+    }, React.createElement("header", null, React.createElement("p", null, "New task")), React.createElement("input", {
       "value": this.state.title,
       "onChange": this.onChange.bind(this, 'title'),
       "placeholder": 'title'
@@ -536,7 +533,7 @@ module.exports = React.createClass({
       "list": this.state.projects,
       "valueKey": 'id',
       "titleKey": 'title',
-      "onSelect": this.projectSelect,
+      "onSelect": this.onChange.bind(this, 'project'),
       "placeholder": 'project'
     }), React.createElement("input", {
       "value": this.state.rate,
@@ -546,7 +543,7 @@ module.exports = React.createClass({
       "list": Currencies(),
       "valueKey": 'currency',
       "titleKey": 'name',
-      "onSelect": this.currencySelect,
+      "onSelect": this.onChange.bind(this, 'currency'),
       "placeholder": 'currency'
     }), React.createElement("input", {
       "placeholder": 'estimate',
@@ -556,11 +553,15 @@ module.exports = React.createClass({
       "value": this.state.deadline,
       "readOnly": true
     }), React.createElement("br", null), React.createElement(Datepicker, {
-      "onSelect": this.dateSelect
+      "onSelect": this.onChange.bind(this, 'deadline'),
+      "selected": this.state.deadline
     }), React.createElement("input", {
+      "type": 'range',
       "value": this.state.complexity,
       "onChange": this.onChange.bind(this, 'complexity'),
-      "placeholder": 'complexity'
+      "min": 0.,
+      "step": 1.,
+      "max": 10.
     }), React.createElement("br", null), React.createElement("button", {
       "onClick": this.addTask
     }, "add task"));

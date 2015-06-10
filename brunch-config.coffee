@@ -3,6 +3,8 @@ exports.config =
   plugins :
     autoReload :
       enabled : true
+    stylus :
+      imports : ['nib']
 
   files:
     javascripts:

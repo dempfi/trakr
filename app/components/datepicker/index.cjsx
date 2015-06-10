@@ -22,15 +22,16 @@ module.exports = React.createClass
     title = moment(@state.currentMonth).format('MMMM YYYY')
 
     return (
-      <div>
-        <div>
+      <div className='-datepicker'>
+        <div className='header'>
           <span onClick={@incrementMonth.bind(@, -1)}>prev</span>
           <span>{title}</span>
           <span onClick={@incrementMonth.bind(@, 1)}>next</span>
         </div>
         <Month
-          month = {@state.currentMonth}
+          month    = {@state.currentMonth}
           onSelect = {@onSelect}
+          selected = {@props.selected}
         />
       </div>
     )

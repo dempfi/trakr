@@ -12,10 +12,13 @@ module.exports = React.createClass
     ret
 
   renderDate : (day) ->
+    className = 'other-month' if day[1] isnt @props.month[1]
+    className = 'active' if moment(day).format('YYYY-MM-DD') is @props.selected
     return (
       <li
-        key     = {day.join('-')}
-        onClick = {@props.onSelect.bind(null, day)}
+        key       = {day.join('-')}
+        className = {className}
+        onClick   = {@props.onSelect.bind(null, day)}
       >{day[2]}</li>
     )
 

@@ -19,27 +19,19 @@ module.exports = React.createClass
     complexity : 0
 
   addTask : ->
-    state = @state
-    delete state.projects
-    TasksActions.add state
+    TasksActions.add @state
 
-  projectSelect : (val) ->
-    @setState 'project' : val
-
-  onChange : (key ,e) ->
+  onChange : (key, e) ->
     obj      = {}
-    obj[key] = e.target.value
+    obj[key] = e.target?.value or e
     @setState obj
-
-  currencySelect : (val) ->
-    @setState 'currency' : val
-
-  dateSelect : (val) ->
-    @setState 'deadline' : val
 
   render : ->
     return (
-      <div className='new-task'>
+      <div className='-screen new-task'>
+        <header>
+          <p>New task</p>
+        </header>
         <input
           value       = {@state.title}
           onChange    = {@onChange.bind(@,'title')}
@@ -49,19 +41,19 @@ module.exports = React.createClass
           list        = {@state.projects}
           valueKey    = 'id'
           titleKey    = 'title'
-          onSelect    = {@projectSelect}
+          onSelect    = {@onChange.bind(@, 'project')}
           placeholder = 'project'
         />
         <input
           value       = {@state.rate}
-          onChange    = {@onChange.bind(@,'rate')}
+          onChange    = {@onChange.bind(@, 'rate')}
           placeholder = 'rate'
         /><br/>
         <Autocomplete
           list        = {Currencies()}
           valueKey    = 'currency'
           titleKey    = 'name'
-          onSelect    = {@currencySelect}
+          onSelect    = {@onChange.bind(@, 'currency')}
           placeholder = 'currency'
         />
         <input placeholder = 'estimate' readOnly/><br/>
@@ -69,12 +61,17 @@ module.exports = React.createClass
           placeholder = 'deadline'
           value={@state.deadline}
           readOnly/><br/>
-        <Datepicker onSelect={@dateSelect}/>
-
+        <Datepicker
+          onSelect = {@onChange.bind(@, 'deadline')}
+          selected = {@state.deadline}
+        />
         <input
-          value={@state.complexity}
-          onChange={@onChange.bind(@,'complexity')}
-          placeholder='complexity'
+          type     = 'range'
+          value    = {@state.complexity}
+          onChange = {@onChange.bind(@, 'complexity')}
+          min      = {0}
+          step     = {1}
+          max      = {10}
         /><br/>
         <button onClick={@addTask}>add task</button>
       </div>
