@@ -29,7 +29,9 @@ module.exports = React.createClass
       list    : filteredList
       value   : value
 
-  handleFocus : -> @setState isOpen : true
+  handleFocus : (e) ->
+    @setState isOpen : true
+    @onChange e
 
   handleBlur  : ->
     setTimeout =>
@@ -48,10 +50,10 @@ module.exports = React.createClass
 
   handleKeyDown : (e) ->
     switch e.key
-      when 'ArrowDown'  then @updateIndex('down')
-      when 'ArrowUp'    then @updateIndex('up')
-      when 'Enter'      then @handleEnter()
-      when 'Escape'     then console.log('ESC')
+      when 'ArrowDown' then @updateIndex('down')
+      when 'ArrowUp'   then @updateIndex('up')
+      when 'Enter'     then @handleEnter()
+      when 'Escape'    then console.log('ESC')
 
 
   updateIndex : (direction) ->
@@ -103,6 +105,7 @@ module.exports = React.createClass
           onFocus     = {@handleFocus}
           onBlur      = {@handleBlur}
           placeholder = {@props.placeholder}
+          tabIndex    = '1'
         />
         <ul className = {classNames(listClasses)}>
           {@state.list?.map (item) => @renderItem(item)}

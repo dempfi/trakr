@@ -184,10 +184,11 @@ module.exports = React.createClass({
       value: value
     });
   },
-  handleFocus: function() {
-    return this.setState({
+  handleFocus: function(e) {
+    this.setState({
       isOpen: true
     });
+    return this.onChange(e);
   },
   handleBlur: function() {
     return setTimeout((function(_this) {
@@ -275,7 +276,8 @@ module.exports = React.createClass({
       "onKeyDown": this.handleKeyDown,
       "onFocus": this.handleFocus,
       "onBlur": this.handleBlur,
-      "placeholder": this.props.placeholder
+      "placeholder": this.props.placeholder,
+      "tabIndex": '1'
     }), React.createElement("ul", {
       "className": classNames(listClasses)
     }, (_ref = this.state.list) != null ? _ref.map((function(_this) {
@@ -568,11 +570,17 @@ module.exports = React.createClass({
   render: function() {
     return React.createElement("div", {
       "className": '-screen new-task'
-    }, React.createElement("header", null, React.createElement("p", null, "New task")), React.createElement("input", {
+    }, React.createElement("header", null, React.createElement("p", null, "New task")), React.createElement("div", {
+      "className": 'row'
+    }, React.createElement("input", {
+      "id": 'title',
       "value": this.state.title,
       "onChange": this.onChange.bind(this, 'title'),
-      "placeholder": 'title'
-    }), React.createElement("br", null), React.createElement(Autocomplete, {
+      "tabIndex": '1'
+    }), React.createElement("label", {
+      "htmlFor": 'title',
+      "children": 'Task'
+    })), React.createElement(Autocomplete, {
       "list": this.state.projects,
       "valueKey": 'id',
       "titleKey": 'title',
@@ -581,7 +589,8 @@ module.exports = React.createClass({
     }), React.createElement("input", {
       "value": this.state.rate,
       "onChange": this.onChange.bind(this, 'rate'),
-      "placeholder": 'rate'
+      "placeholder": 'rate',
+      "tabIndex": '1'
     }), React.createElement("br", null), React.createElement(Autocomplete, {
       "list": Currencies(),
       "valueKey": 'currency',
@@ -600,7 +609,8 @@ module.exports = React.createClass({
       "onChange": this.onChange.bind(this, 'complexity'),
       "min": 0.,
       "step": 1.,
-      "max": 10.
+      "max": 10.,
+      "tabIndex": '1'
     }), React.createElement("br", null), React.createElement("button", {
       "onClick": this.addTask
     }, "add task"));

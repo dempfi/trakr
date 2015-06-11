@@ -31,11 +31,20 @@ module.exports = React.createClass
       <header>
         <p>New task</p>
       </header>
-      <input
-        value       = {@state.title}
-        onChange    = {@onChange.bind(@,'title')}
-        placeholder = 'title'
-      /><br/>
+
+      <div className='row'>
+        <input
+          id          = 'title'
+          value       = {@state.title}
+          onChange    = {@onChange.bind(@,'title')}
+          tabIndex    = '1'
+        />
+        <label
+          htmlFor  = 'title'
+          children = 'Task'
+        />
+      </div>
+
       <Autocomplete
         list        = {@state.projects}
         valueKey    = 'id'
@@ -47,6 +56,7 @@ module.exports = React.createClass
         value       = {@state.rate}
         onChange    = {@onChange.bind(@, 'rate')}
         placeholder = 'rate'
+        tabIndex    = '1'
       /><br/>
       <Autocomplete
         list        = {Currencies()}
@@ -67,6 +77,7 @@ module.exports = React.createClass
         min      = {0}
         step     = {1}
         max      = {10}
+        tabIndex = '1'
       /><br/>
       <button onClick={@addTask}>add task</button>
     </div>
