@@ -8,6 +8,8 @@
     height 60px
     box-shadow inset 0 -1px SOLITUDE
     display block
+    &.-half
+      width 50%
     input
       width 100%
       height 100%
@@ -21,7 +23,6 @@
       &:focus
         border-bottom 2px solid FLUSH
         outline none
-
       &:focus + span
       &:valid + span
         top 14px
@@ -31,3 +32,4 @@
       absolute left top 22px
       color SLATE
       font-size 14
+      transition all 0.2s

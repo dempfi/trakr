@@ -13,11 +13,8 @@ module.exports = React.createClass
     _.map @state.activity[@props.params.date], (taskId) =>
       <TaskItem key={taskId} task={@state.tasks[taskId]}/>
 
-
   render : ->
-    return (
-      <div className='timeline'>
-        <Dateribbon dates={_.keys @state.activity}/>
-        {@tasksByDay()}
-      </div>
-    )
+    <div className='timeline'>
+      <Dateribbon dates={_.keys @state.activity}/>
+      {@tasksByDay()}
+    </div>

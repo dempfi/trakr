@@ -142,10 +142,12 @@ module.exports = React.createClass({
         date: moment().format('YYYY-MM-DD')
       }
     }, "timeline"), " |", React.createElement(Link, {
+      "to": 'projects'
+    }, "projects"), " |", React.createElement(Link, {
       "to": 'new-task'
     }, "new task"), " |", React.createElement(Link, {
       "to": 'new-project'
-    }, "new project")), React.createElement(ReactRouter.RouteHandler, null));
+    }, "new project"), " |"), React.createElement(ReactRouter.RouteHandler, null));
   }
 });
 });
@@ -467,19 +469,43 @@ module.exports = React.createClass({
 });
 });
 
-;require.register("components/taskItem", function(exports, require, module) {
+;require.register("components/projectItem", function(exports, require, module) {
 var Link;
 
 Link = ReactRouter.Link;
 
 module.exports = React.createClass({
   render: function() {
-    return React.createElement("div", null, React.createElement(Link, {
+    return React.createElement(Link, {
+      "to": 'project',
+      "params": {
+        id: this.props.project.id
+      }
+    }, this.props.project.title);
+  }
+});
+});
+
+;require.register("components/taskItem", function(exports, require, module) {
+var Link, ProjectsStore;
+
+Link = ReactRouter.Link;
+
+ProjectsStore = require('store/projects');
+
+module.exports = React.createClass({
+  mixins: [
+    Reflux.connectFilter(ProjectsStore, 'project', function(i) {
+      return i[this.props.task.project];
+    })
+  ],
+  render: function() {
+    return React.createElement(Link, {
       "to": 'task',
       "params": {
         id: this.props.task.id
       }
-    }, this.props.task.title, " ", this.props.task.project));
+    }, this.props.task.title, " ", this.state.project.title);
   }
 });
 });
@@ -618,8 +644,82 @@ module.exports = React.createClass({
 });
 });
 
+;require.register("layouts/project/index", function(exports, require, module) {
+var ProjectsStore, TaskItem, TasksStore,
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+TasksStore = require('store/tasks');
+
+ProjectsStore = require('store/projects');
+
+TaskItem = require('components/taskItem');
+
+module.exports = React.createClass({
+  mixins: [
+    Reflux.ListenerMethods, Reflux.connectFilter(ProjectsStore, 'project', function(i) {
+      return i[this.props.params.id];
+    })
+  ],
+  setTasks: function(allTasks) {
+    var projectTasks;
+    projectTasks = this.state.project.tasks;
+    return this.setState({
+      tasks: _.filter(allTasks, function(_, key) {
+        return __indexOf.call(projectTasks, key) >= 0;
+      })
+    });
+  },
+  componentWillMount: function() {
+    this.setTasks(TasksStore.tasks);
+    return this.listenTo(TasksStore, this.setTasks);
+  },
+  render: function() {
+    return React.createElement("div", null, this.state.project.title, React.createElement("br", null), React.createElement("ul", null, _.map(this.state.tasks, function(t, i) {
+      return React.createElement(TaskItem, {
+        "key": i,
+        "task": t
+      });
+    })));
+  }
+});
+});
+
+;require.register("layouts/projects/index", function(exports, require, module) {
+var ProjectItem, ProjectsStore;
+
+ProjectsStore = require('store/projects');
+
+ProjectItem = require('components/projectItem');
+
+module.exports = React.createClass({
+  mixins: [Reflux.connect(ProjectsStore, 'projects')],
+  tasksByDay: function() {
+    return _.map(this.state.activity[this.props.params.date], (function(_this) {
+      return function(taskId) {
+        return React.createElement(TaskItem, {
+          "key": taskId,
+          "task": _this.state.tasks[taskId]
+        });
+      };
+    })(this));
+  },
+  render: function() {
+    return React.createElement("div", {
+      "className": '-screen timeline'
+    }, _.map(this.state.projects, (function(_this) {
+      return function(project, id) {
+        return React.createElement(ProjectItem, {
+          "key": id,
+          "project": project
+        });
+      };
+    })(this)));
+  }
+});
+});
+
 ;require.register("layouts/task/index", function(exports, require, module) {
-var ProjectsStore, TasksActions, TasksStore, TimeslotsStore, hhmm;
+var Link, ProjectsStore, TasksActions, TasksStore, TimeslotsStore, hhmm;
 
 TasksStore = require('store/tasks');
 
@@ -631,14 +731,25 @@ TasksActions = require('actions/tasks');
 
 hhmm = require('utils/formatSeconds');
 
+Link = ReactRouter.Link;
+
 module.exports = React.createClass({
   mixins: [
-    Reflux.connectFilter(TasksStore, 'task', function(i) {
+    Reflux.ListenerMethods, Reflux.connectFilter(TasksStore, 'task', function(i) {
       return i[this.props.params.id];
     }), Reflux.connectFilter(TimeslotsStore, 'timeslots', function(i) {
       return i[this.props.params.id];
     })
   ],
+  setProject: function(projects) {
+    return this.setState({
+      project: projects[this.state.task.project]
+    });
+  },
+  componentWillMount: function() {
+    this.setProject(ProjectsStore.projects);
+    return this.listenTo(ProjectsStore, this.setProject);
+  },
   start: function() {
     return TasksActions.addTimeslot(this.props.params.id);
   },
@@ -653,7 +764,12 @@ module.exports = React.createClass({
   render: function() {
     var worked;
     worked = this.worked();
-    return React.createElement("div", null, this.state.task.title, React.createElement("br", null), this.state.task.rate, this.state.task.currency, React.createElement("br", null), "worked : ", worked[0], "h ", worked[1], "m ", worked[2], "s", React.createElement("br", null), "earned : ", worked[3] / 3600 * this.state.task.rate, this.state.task.currency, React.createElement("br", null), React.createElement("button", {
+    return React.createElement("div", null, this.state.task.title, React.createElement("br", null), React.createElement(Link, {
+      "to": 'project',
+      "params": {
+        id: this.state.task.project
+      }
+    }, this.state.project.title), this.state.task.rate, this.state.task.currency, React.createElement("br", null), "worked : ", worked[0], "h ", worked[1], "m ", worked[2], "s", React.createElement("br", null), "earned : ", worked[3] / 3600 * this.state.task.rate, this.state.task.currency, React.createElement("br", null), React.createElement("button", {
       "onClick": this.start
     }, "Start"), React.createElement("button", {
       "onClick": this.stop
@@ -696,7 +812,7 @@ module.exports = React.createClass({
 });
 
 ;require.register("router", function(exports, require, module) {
-var App, NewProject, NewTask, Route, Task, Timeline, routes;
+var App, NewProject, NewTask, Project, Projects, Route, Task, Timeline, routes;
 
 App = require('app');
 
@@ -707,6 +823,10 @@ NewTask = require('layouts/new-task');
 NewProject = require('layouts/new-project');
 
 Task = require('layouts/task');
+
+Projects = require('layouts/projects');
+
+Project = require('layouts/project');
 
 Route = ReactRouter.Route;
 
@@ -722,6 +842,13 @@ routes = React.createElement(Route, {
   "name": 'timeline',
   "path": '/timeline/:date',
   "handler": Timeline
+}), React.createElement(Route, {
+  "name": 'projects',
+  "handler": Projects
+}), React.createElement(Route, {
+  "name": 'project',
+  "path": '/project/:id',
+  "handler": Project
 }), React.createElement(Route, {
   "name": 'task',
   "path": '/task/:id',

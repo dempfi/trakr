@@ -1,12 +1,12 @@
-Link = ReactRouter.Link
+Link          = ReactRouter.Link
+ProjectsStore = require 'store/projects'
 
 module.exports = React.createClass
+  mixins: [
+    Reflux.connectFilter(ProjectsStore, 'project', (i) -> i[@props.task.project])
+  ]
 
   render : ->
-    return (
-      <div>
-        <Link to='task' params={id : @props.task.id}>
-          {@props.task.title} {@props.task.project}
-        </Link>
-      </div>
-    )
+    <Link to='task' params={id : @props.task.id}>
+      {@props.task.title} {@state.project.title}
+    </Link>
