@@ -62,25 +62,38 @@
   background: #fff;
   width: 100%;
 }
-.row {
+.new-task .row {
   height: 60px;
   -webkit-box-shadow: inset 0 -1px #ebedf2;
   box-shadow: inset 0 -1px #ebedf2;
+  display: block;
 }
-.row input {
+.new-task .row input {
   width: 100%;
   height: 100%;
-  background: rgba(255,0,0,0.1);
   border: none;
   font-size: 14px;
   font-weight: 500;
   font-family: "Helvetica Neue";
+  padding-top: 31px;
+  padding-bottom: 12px;
+  line-height: 17px;
 }
-.row label {
+.new-task .row input:focus {
+  border-bottom: 2px solid #ff8000;
+  outline: none;
+}
+.new-task .row input:focus + span,
+.new-task .row input:valid + span {
+  top: 14px;
+  font-size: 12px;
+}
+.new-task .row span {
   position: absolute;
   left: 0;
   top: 22px;
   color: #828a99;
+  font-size: 14;
 }
 
 body {

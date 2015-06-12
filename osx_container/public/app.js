@@ -561,30 +561,30 @@ module.exports = React.createClass({
   addTask: function() {
     return TasksActions.add(this.state);
   },
-  onChange: function(key, e) {
-    var obj, _ref;
+  set: function(key, value) {
+    var obj;
     obj = {};
-    obj[key] = ((_ref = e.target) != null ? _ref.value : void 0) || e;
+    obj[key] = value;
     return this.setState(obj);
+  },
+  onChange: function(key, e) {
+    return this.set(key, e.target.value);
   },
   render: function() {
     return React.createElement("div", {
       "className": '-screen new-task'
-    }, React.createElement("header", null, React.createElement("p", null, "New task")), React.createElement("div", {
+    }, React.createElement("header", null, React.createElement("p", null, "New task")), React.createElement("label", {
       "className": 'row'
     }, React.createElement("input", {
-      "id": 'title',
       "value": this.state.title,
       "onChange": this.onChange.bind(this, 'title'),
-      "tabIndex": '1'
-    }), React.createElement("label", {
-      "htmlFor": 'title',
-      "children": 'Task'
-    })), React.createElement(Autocomplete, {
+      "tabIndex": '1',
+      "required": true
+    }), React.createElement("span", null, "Task")), React.createElement("br", null), React.createElement("br", null), React.createElement("br", null), React.createElement(Autocomplete, {
       "list": this.state.projects,
       "valueKey": 'id',
       "titleKey": 'title',
-      "onSelect": this.onChange.bind(this, 'project'),
+      "onSelect": this.set.bind(this, 'project'),
       "placeholder": 'project'
     }), React.createElement("input", {
       "value": this.state.rate,
@@ -595,13 +595,13 @@ module.exports = React.createClass({
       "list": Currencies(),
       "valueKey": 'currency',
       "titleKey": 'name',
-      "onSelect": this.onChange.bind(this, 'currency'),
+      "onSelect": this.set.bind(this, 'currency'),
       "placeholder": 'currency'
     }), React.createElement("input", {
       "placeholder": 'estimate',
       "readOnly": true
     }), React.createElement("br", null), React.createElement(Datepicker, {
-      "onSelect": this.onChange.bind(this, 'deadline'),
+      "onSelect": this.set.bind(this, 'deadline'),
       "selected": this.state.deadline
     }), React.createElement("input", {
       "type": 'range',

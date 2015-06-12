@@ -21,10 +21,14 @@ module.exports = React.createClass
   addTask : ->
     TasksActions.add @state
 
-  onChange : (key, e) ->
-    obj      = {}
-    obj[key] = e.target?.value or e
+  set : (key, value) ->
+    obj = {}
+    obj[key] = value
     @setState obj
+
+  onChange : (key, e) ->
+    @set key, e.target.value
+
 
   render : ->
     <div className='-screen new-task'>
@@ -32,24 +36,24 @@ module.exports = React.createClass
         <p>New task</p>
       </header>
 
-      <div className='row'>
+      <label className='row'>
         <input
-          id          = 'title'
-          value       = {@state.title}
-          onChange    = {@onChange.bind(@,'title')}
-          tabIndex    = '1'
+          value    = {@state.title}
+          onChange = {@onChange.bind(@,'title')}
+          tabIndex = '1'
+          required
         />
-        <label
-          htmlFor  = 'title'
-          children = 'Task'
-        />
-      </div>
+        <span>Task</span>
+      </label>
 
+      <br/>
+      <br/>
+      <br/>
       <Autocomplete
         list        = {@state.projects}
         valueKey    = 'id'
         titleKey    = 'title'
-        onSelect    = {@onChange.bind(@, 'project')}
+        onSelect    = {@set.bind(@, 'project')}
         placeholder = 'project'
       />
       <input
@@ -62,12 +66,12 @@ module.exports = React.createClass
         list        = {Currencies()}
         valueKey    = 'currency'
         titleKey    = 'name'
-        onSelect    = {@onChange.bind(@, 'currency')}
+        onSelect    = {@set.bind(@, 'currency')}
         placeholder = 'currency'
       />
       <input placeholder = 'estimate' readOnly/><br/>
       <Datepicker
-        onSelect = {@onChange.bind(@, 'deadline')}
+        onSelect = {@set.bind(@, 'deadline')}
         selected = {@state.deadline}
       />
       <input
