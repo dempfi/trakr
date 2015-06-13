@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="6px" height="6px" viewBox="0 0 6 6" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.3.2 (12041) - http://www.bohemiancoding.com/sketch -->
+    <title>dot + Shape</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="wireframe" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="new-task" sketch:type="MSArtboardGroup" transform="translate(-493.000000, -607.000000)">
+            <g sketch:type="MSLayerGroup" transform="translate(340.000000, 275.000000)" id="complexity">
+                <g transform="translate(16.000000, 290.000000)" sketch:type="MSShapeGroup">
+                    <g id="selector" transform="translate(0.000000, 35.000000)">
+                        <g id="slider" transform="translate(130.000000, 0.000000)">
+                            <g id="dot-+-Shape" transform="translate(7.000000, 7.000000)">
+                                <rect id="dot" fill="#FF8000" x="0" y="0" width="6" height="6" rx="10"></rect>
+                                <path d="M1,3 L1,3 C1,4.10253614 1.89676775,5 3,5 C4.10253614,5 5,4.10323225 5,3 C5,1.89746386 4.10323225,1 3,1 C1.89746386,1 1,1.89676775 1,3 L1,3 Z M0,3 C0,1.34314575 1.34651712,0 3,0 C4.65685425,0 6,1.34651712 6,3 C6,4.65685425 4.65348288,6 3,6 C1.34314575,6 0,4.65348288 0,3 L0,3 Z" id="Shape" fill-opacity="0.1" fill="#000000"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

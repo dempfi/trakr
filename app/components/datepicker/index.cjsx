@@ -39,7 +39,7 @@ module.exports = React.createClass
     title    = moment @state.currentMonth
     isActive = active : @state.isOpen
 
-    <div>
+    <div className='datepicker-wrap'>
       <span
         ref       = 'input'
         className = {classNames 'input', isActive}

@@ -12,7 +12,7 @@ module.exports = React.createClass
   getInitialState : ->
     title      : ''
     project    : ''
-    rate       : 0
+    rate       : ''
     currency   : ''
     estimate   : ''
     deadline   : ''
@@ -36,53 +36,86 @@ module.exports = React.createClass
         <p>New task</p>
       </header>
 
+      <div className='main-padding'>
+
+        <label className='row'>
+          <input
+            value    = {@state.title}
+            onChange = {@onChange.bind(@,'title')}
+            tabIndex = '1'
+            required
+          />
+          <span className='placeholder'>Task</span>
+        </label>
+
+        <label className='row'>
+          <Autocomplete
+            list        = {@state.projects}
+            valueKey    = 'id'
+            titleKey    = 'title'
+            onSelect    = {@set.bind(@, 'project')}
+            required
+          />
+          <span className='placeholder'>Project</span>
+        </label>
+
+        <div className='two-inputs'>
+
+          <label className='row'>
+            <input
+              value       = {@state.rate}
+              onChange    = {@onChange.bind(@, 'rate')}
+              tabIndex    = '1'
+              required
+            />
+            <span className='placeholder'>Hourly rate</span>
+          </label>
+
+          <label className='row'>
+            <Autocomplete
+              list        = {Currencies()}
+              valueKey    = 'currency'
+              titleKey    = 'name'
+              onSelect    = {@set.bind(@, 'currency')}
+            />
+            <span className='placeholder'>Currency</span>
+          </label>
+
+        </div>
+
+        <div className='two-inputs'>
+
+          <label className='row'>
+            <input required readOnly />
+            <span className='placeholder'>Estimate</span>
+          </label>
+
+          <label className='row'>
+            <Datepicker
+              onSelect = {@set.bind(@, 'deadline')}
+              selected = {@state.deadline}
+            />
+            <span className='placeholder'>Deadline</span>
+          </label>
+
+        </div>
+
       <label className='row'>
         <input
-          value    = {@state.title}
-          onChange = {@onChange.bind(@,'title')}
+          type     = 'range'
+          value    = {@state.complexity}
+          onChange = {@onChange.bind(@, 'complexity')}
+          min      = {0}
+          step     = {1}
+          max      = {10}
           tabIndex = '1'
-          required
         />
-        <span>Task</span>
+        <span className='placeholder'>Complexity</span>
       </label>
 
-      <br/>
-      <br/>
-      <br/>
-      <Autocomplete
-        list        = {@state.projects}
-        valueKey    = 'id'
-        titleKey    = 'title'
-        onSelect    = {@set.bind(@, 'project')}
-        placeholder = 'project'
-      />
-      <input
-        value       = {@state.rate}
-        onChange    = {@onChange.bind(@, 'rate')}
-        placeholder = 'rate'
-        tabIndex    = '1'
-      /><br/>
-      <Autocomplete
-        list        = {Currencies()}
-        valueKey    = 'currency'
-        titleKey    = 'name'
-        onSelect    = {@set.bind(@, 'currency')}
-        placeholder = 'currency'
-      />
-      <input placeholder = 'estimate' readOnly/><br/>
-      <Datepicker
-        onSelect = {@set.bind(@, 'deadline')}
-        selected = {@state.deadline}
-      />
-      <input
-        type     = 'range'
-        value    = {@state.complexity}
-        onChange = {@onChange.bind(@, 'complexity')}
-        min      = {0}
-        step     = {1}
-        max      = {10}
-        tabIndex = '1'
-      /><br/>
-      <button onClick={@addTask}>add task</button>
+      </div>
+
+      <button className='main-button' onClick={@addTask}>add task</button>
+
     </div>
 
