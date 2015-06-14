@@ -14,8 +14,9 @@ module.exports = React.createClass
 
 
   getInitialState : ->
-    value       : ''
-    activeItem  : {}
+    value      : ''
+    isOpen     : false
+    activeItem : {}
 
   onChange : (e) ->
     value         = e.target.value
@@ -26,35 +27,35 @@ module.exports = React.createClass
       reg.test(i[@props.valueKey])
 
     @setState
-      list    : filteredList
-      value   : value
+      value : value
+      list  : filteredList
+
+  hide : -> @setState 'isOpen' : false
+
+  show : -> @setState 'isOpen' : true
+
+  handleBlur : ->
+    @selectItem @state.activeItem
+    @hide()
 
   handleFocus : (e) ->
-    @setState isOpen : true
+    console.log 'focus'
+    @show()
     @onChange e
 
-  handleBlur  : ->
-    setTimeout =>
-      @setState isOpen : false
-    , 10
-
-  handleEnter : ->
-    @selectItem @state.activeItem
-    @setState isOpen : false
-
-
   selectItem : (item) ->
-    @setState value : item[@props.titleKey]
+    @setState
+      value      : item[@props.titleKey]
+      activeItem : {}
     @props.onSelect(item[@props.valueKey], item)
-
+    @hide()
 
   handleKeyDown : (e) ->
     switch e.key
       when 'ArrowDown' then @updateIndex('down')
       when 'ArrowUp'   then @updateIndex('up')
-      when 'Enter'     then @handleEnter()
+      when 'Enter'     then @selectItem(@state.activeItem)
       when 'Escape'    then console.log('ESC')
-
 
   updateIndex : (direction) ->
     current     = @state.activeItem
@@ -65,30 +66,28 @@ module.exports = React.createClass
       else @indexUp(currentId, lastId)
     @setState activeItem : @state.list[nextId]
 
-
   indexDown : (cur, last) ->
     return 0        if cur < 0 or cur is last
     return cur + 1  if cur < last
     return last
-
 
   indexUp : (cur, last) ->
     return last     if cur <= 0
     return cur - 1  if cur <= last
     return last
 
+  foucusItem : (i) ->
+    @setState activeItem : i
 
   renderItem : (item) ->
     styles = isActive : @state.activeItem[@props.valueKey] is item[@props.valueKey]
-    return (
-      <li
-        className = {classNames(styles)}
-        key       = {item[@props.valueKey]}
-        onClick   = {@selectItem.bind(@, item)}
-      >
-        {item[@props.titleKey]}
-      </li>
-    )
+    <li
+      className    = {classNames(styles)}
+      key          = {item[@props.valueKey]}
+      onMouseEnter = {@foucusItem.bind(@, item)}
+      onMouseLeave = {@foucusItem.bind(@, {})}
+      children     = {item[@props.titleKey]}
+    />
 
 
   render : ->
@@ -96,19 +95,21 @@ module.exports = React.createClass
       list    : true
       isOpen  : @state.isOpen
 
-    return (
-      <div className='autocomplete'>
-        <input
-          value       = {@state.value}
-          onChange    = {@onChange}
-          onKeyDown   = {@handleKeyDown}
-          onFocus     = {@handleFocus}
-          onBlur      = {@handleBlur}
-          placeholder = {@props.placeholder}
-          tabIndex    = '1'
-        />
-        <ul className = {classNames(listClasses)}>
-          {@state.list?.map (item) => @renderItem(item)}
-        </ul>
-      </div>
-    )
+    <div className='autocomplete'>
+      <input
+        value       = {@state.value}
+        onChange    = {@onChange}
+        onKeyDown   = {@handleKeyDown}
+        onFocus     = {@handleFocus}
+        onBlur      = {@handleBlur}
+        onClick     = {@show}
+        placeholder = {@props.placeholder}
+        tabIndex    = '1'
+      />
+      <ul
+        className = {classNames(listClasses)}
+        onClick   = {@selectItem.bind(@, @state.activeItem)}
+      >
+        {@state.list?.map (item) => @renderItem(item)}
+      </ul>
+    </div>
