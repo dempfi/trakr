@@ -21,9 +21,7 @@ module.exports  = Reflux.createStore
 
   onAdd : (payload) ->
     id = _.createId()
-    project = _.merge payload,
-      tasks : []
-      id    : id
+    project = _.merge payload, { tasks : [], id : id }
     @set id, project
     @inform()
 

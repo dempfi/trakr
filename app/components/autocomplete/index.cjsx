@@ -39,14 +39,11 @@ module.exports = React.createClass
     @hide()
 
   handleFocus : (e) ->
-    console.log 'focus'
     @show()
     @onChange e
 
   selectItem : (item) ->
-    @setState
-      value      : item[@props.titleKey]
-      activeItem : {}
+    @setState value : item[@props.titleKey]
     @props.onSelect(item[@props.valueKey], item)
     @hide()
 
@@ -58,10 +55,10 @@ module.exports = React.createClass
       when 'Escape'    then console.log('ESC')
 
   updateIndex : (direction) ->
-    current     = @state.activeItem
-    currentId   = @state.list.indexOf current
-    lastId      = @state.list.length - 1
-    nextId      =
+    current   = @state.activeItem
+    currentId = @state.list.indexOf current
+    lastId    = @state.list.length - 1
+    nextId    =
       if direction is 'down' then @indexDown(currentId, lastId)
       else @indexUp(currentId, lastId)
     @setState activeItem : @state.list[nextId]

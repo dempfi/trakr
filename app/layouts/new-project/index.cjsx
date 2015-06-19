@@ -1,4 +1,6 @@
 ProjectsActions = require 'actions/projects'
+Autocomplete    = require 'components/autocomplete'
+Currencies      = require 'utils/currencies'
 
 module.exports = React.createClass
 
@@ -6,16 +8,19 @@ module.exports = React.createClass
     return {
       title    : ''
       rate     : ''
-      currency : '$'
+      currency : ''
     }
 
   addProject : ->
     ProjectsActions.add(@state)
 
-  onChange : (key, e) ->
+  set : (key, value) ->
     obj = {}
-    obj[key] = e.target.value
+    obj[key] = value
     @setState obj
+
+  onChange : (key, e) ->
+    @set key, e.target.value
 
   render : ->
     <div className = 'new-task'>
@@ -23,16 +28,25 @@ module.exports = React.createClass
         value       = {@state.title}
         onChange    = {@onChange.bind(@,'title')}
         placeholder = 'title'
+        tabIndex = 1
       /><br/>
       <input
         value       = {@state.rate}
         onChange    = {@onChange.bind(@,'rate')}
         placeholder = 'default rate'
+        tabIndex = 1
       /><br/>
-      <input
-        value       = {@state.project}
-        onChange    = {@onChange.bind(@,'currency')}
-        placeholder = 'currency'
-      /><br/>
-      <button onClick = {@addProject}>add project</button>
+      <label className='row'>
+        <Autocomplete
+          list     = {Currencies()}
+          valueKey = 'currency'
+          titleKey = 'name'
+          onSelect = {@set.bind(@, 'currency')}
+        />
+        <span className='placeholder'>Currency</span>
+      </label>
+      <button
+        onClick = {@addProject}
+        tabIndex = 1
+      >add project</button>
     </div>
