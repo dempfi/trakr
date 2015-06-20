@@ -9,7 +9,7 @@ module.exports = React.createClass
   mixins: [
     Reflux.ListenerMethods
     Reflux.connectFilter(TasksStore, 'task',
-      (i) -> i[@props.params.id]),
+      (i) -> i[@props.params.id])
     Reflux.connectFilter(TimeslotsStore, 'timeslots',
       (i) -> i[@props.params.id])
   ]

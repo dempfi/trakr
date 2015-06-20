@@ -1,6 +1,6 @@
 TasksStore    = require 'store/tasks'
 ProjectsStore = require 'store/projects'
-TaskItem      = require 'components/taskItem'
+TaskItem      = require 'components/timelineItem'
 
 module.exports = React.createClass
   mixins: [

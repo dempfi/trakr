@@ -1,6 +1,6 @@
 TasksStore    = require 'store/tasks'
 ActivityStore = require 'store/activity'
-TaskItem      = require 'components/taskItem'
+ListItem      = require 'components/timelineItem'
 Dateribbon    = require 'components/dateribbon'
 
 module.exports = React.createClass
@@ -11,10 +11,16 @@ module.exports = React.createClass
 
   tasksByDay : ->
     _.map @state.activity[@props.params.date], (taskId) =>
-      <TaskItem key={taskId} task={@state.tasks[taskId]}/>
+      <ListItem
+        key={taskId}
+        task={@state.tasks[taskId]}
+        date={@props.params.date}
+      />
 
   render : ->
-    <div className='timeline'>
+    <div className='-screen timeline'>
       <Dateribbon dates={_.keys @state.activity}/>
-      {@tasksByDay()}
+      <div className='list'>
+        {@tasksByDay()}
+      </div>
     </div>
