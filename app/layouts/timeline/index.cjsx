@@ -28,12 +28,17 @@ module.exports = React.createClass
   render : ->
     date  = @props.params.date
     tasks = @state.activity[date]
-    <div className='-screen timeline'>
-      <header>
+    <div>
+      <header className='timeline'>
         <Link to='projects'>Projects</Link>
+        <div className='dateribbon-wrap'>
+          <Dateribbon dates={_.keys @state.activity}/>
+        </div>
+        <Link to='new-task' className='action'></Link>
       </header>
-      <Dateribbon dates={_.keys @state.activity}/>
-      <div className='list'>
-        {if tasks then @renderTasks tasks else @noActivity date}
-      </div>
+      <main className='timeline'>
+        <ul className='list'>
+          {if tasks then @renderTasks tasks else @noActivity date}
+        </ul>
+      </main>
     </div>

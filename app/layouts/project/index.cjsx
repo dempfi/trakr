@@ -18,6 +18,10 @@ module.exports = React.createClass
 
   render : ->
     <div>
-      {@state.project.title}<br/>
-      <ul>{_.map @state.tasks, (t, i) -> <TaskItem key={i} task={t} />}</ul>
+      <header>
+        {@state.project.title}
+      </header>
+      <main>
+        <ul>{_.map @state.tasks, (t, i) -> <TaskItem key={i} task={t} />}</ul>
+      </main>
     </div>

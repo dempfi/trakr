@@ -1,21 +1,18 @@
 @require 'constants'
 global-reset()
 
+::-webkit-scrollbar
+  display none
+  width 0
+
 html
   box-sizing border-box
+  font-size 13px
 
 body
   font-family 'Helvetica Neue'
   color OXFORD
-
-header
-  fixed left top
-  min-height  40px
-  box-shadow  0 1px SOLITUDE
-  width       100%
-  z-index     99999999999999999
-  background  white
-  text-align  center
+  overflow hidden
 
 input
   background transparent
@@ -26,17 +23,6 @@ input
 *:after
   box-sizing inherit
 
-.main-button
-  width 100%
-  background FLUSH
-  display block
-  color WHITE
-  font-weight 200
-  font-size 22px
-  line-height 27px
-  border none
-  cursor pointer
-  height 54px
-
-.main-padding
-  padding 0 20px
+a
+  text-decoration none
+  color inherit

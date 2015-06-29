@@ -17,4 +17,4 @@ module.exports = React.createClass
   render : ->
     dates = @props.dates.sort().reverse()
     dates = @constructDates dates[dates.length - 1]
-    <ul>{_.map dates, (d, i) => @date(d, i)}</ul>
+    <ul className='dateribbon'>{_.map dates, (d, i) => @date(d, i)}</ul>

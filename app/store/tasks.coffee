@@ -46,3 +46,6 @@ module.exports = Reflux.createStore
   onStopTimeslot : ->
     @activeTask = null
     @inform()
+
+  isActive : (id) ->
+    id is @activeTask

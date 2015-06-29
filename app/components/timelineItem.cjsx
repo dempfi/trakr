@@ -1,7 +1,8 @@
-Link           = ReactRouter.Link
 ProjectsStore  = require 'store/projects'
 TimeslotsStore = require 'store/timeslots'
+TasksStore     = require 'store/tasks'
 hhmm           = require 'utils/formatSeconds'
+Link           = ReactRouter.Link
 
 module.exports = React.createClass
   mixins: [
@@ -13,13 +14,24 @@ module.exports = React.createClass
 
   worked : (date) ->
     hhmm _.reduce @state.timeslots, (acc, i) ->
-      acc += i.duration if date.isSame i.start, 'day'
-      acc
+      if date.isSame i.start, 'd' then acc + i.duration else acc
     , 0
+
+  isActive : ->
+    TasksStore.isActive @props.task.id
 
   render : ->
     worked = @worked moment @props.date
-    <Link to='task' params={id : @props.task.id}>
-      {worked[0]}:{worked[1]}:{worked[2]} <br/>
-      {@props.task.title} <br/> {@state.project.title}
-    </Link>
+    <li>
+      <p className="worked-earned #{'-active' if @isActive()}">
+        <span className='worked'>
+          {Number worked[0]}:{worked[1]}
+        </span>
+      </p>
+      <Link to='task' params={id : @props.task.id}>
+        <span className='title'>{@props.task.title}</span>
+        <span className='info'>
+          {@state.project.title}, {moment(@props.task.deadline).fromNow(true)} left
+        </span>
+      </Link>
+    </li>

@@ -1,4 +1,91 @@
-.timeline
+@import '../../styles/constants'
+
+header.timeline
+  height 71px
+  box-shadow none
+  .dateribbon-wrap
+    absolute left bottom right
+    height 23px
+    overflow-x auto
+    overflow-y hidden
+    ::-webkit-scrollbar
+      display none
+    .dateribbon
+      padding-left 20px
+      white-space no-wrap
+      display inline-block
+      position relative
+      height 100%
+      &:before
+        content ''
+        absolute left 20px bottom right
+        height 1px
+        background SOLITUDE
+      a
+        display inline-block
+        padding 0 5px
+        margin-right 10px
+        color SLATE
+        font-size 11px
+        height 100%
+        font-weight 500
+        text-transform uppercase
+        text-decoration none
+        position relative
+        &:first-child
+          padding-left 2px
+        &.active
+          color OXFORD
+          &:before
+            content ''
+            absolute left bottom right
+            background SOLITUDE
+            height 3px
+            background FLUSH
+  .action
+    background-image url('img/add.svg')
+
+main.timeline
+  overflow-y auto
+  top 70px
   .list
-    a
+    overflow-y auto
+    li
       display block
+      height 65px
+      position relative
+      .worked-earned
+        height 100%
+        width 70px
+        float left
+        position relative
+        color OXFORD
+        &.-active
+          color FLUSH
+          &:before
+            absolute left top
+            width 2px
+            height 100%
+            background FLUSH
+            content ''
+        .worked
+          absolute left 20px top 15px
+          font-weight 500
+          line-height 16px
+      a
+        height 100%
+        float left
+        display block
+        border-bottom 1px solid SOLITUDE
+        width 250px
+        position relative
+        text-decoration none
+        .title
+          absolute left top 15px
+          font-weight 500
+          color OXFORD
+          line-height 16px
+        .info
+          absolute left top 33px
+          color SLATE
+          line-height 15px

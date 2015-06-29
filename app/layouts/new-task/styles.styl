@@ -1,10 +1,8 @@
 @import '../../styles/constants'
 
-.new-task
-  background white
-  width 100%
-
-  .row
+main.new-task
+  padding 10px 20px
+  label
     height 60px
     box-shadow inset 0 -1px SOLITUDE
     display block
@@ -19,6 +17,7 @@
       padding-top 31px
       padding-bottom 12px
       line-height 17px
+      color OXFORD
       &[type='range']
         margin 0
       &:focus
@@ -26,19 +25,19 @@
         outline none
         padding-bottom 10px
 
-      &:focus + .placeholder
-      &:valid + .placeholder
+      &:focus + .label
+      &:valid + .label
         top 14px
         font-size 12px
 
-    .placeholder
+    .label
       absolute left top 22px
       color SLATE
       font-size 14
       transition all 0.2s
 
   .two-inputs
-    .row
+    label
       width 50%
       display inline-block
       vertical-align top
@@ -46,63 +45,50 @@
         border-right 1px solid SOLITUDE
       &:last-child
         padding-left 20px
-        .placeholder
+        .label
           left 20px
-
-
-track-color = SOLITUDE
-thumb-color = FLUSH
-
-thumb-radius = 100%
-thumb-height = 20px
-thumb-width = 20px
-
-track-width = 100%
-track-height = 2px
-track-border-width = 1px
-
-track-radius = 5px
-contrast = 5%
-
-track()
-  width track-width
-  height track-height
-  cursor pointer
-  animate 0.2s
-  background: track-color
-  border-radius: track-radius
-
-thumb()
-  height thumb-height
-  width thumb-width
-  border-radius thumb-radius
-  cursor pointer
-  position  relative
-  background url('img/track-dot.svg') no-repeat center center WHITE
-  border 1px solid SOLITUDE
-  box-shadow 0 1px 5px SOLITUDE
-
+  .add-task
+    absolute left bottom
+    width 100%
+    height 54px
+    background white
+    color FLUSH
+    font-size 22px
+    font-weight 300
+    font-family FONT
+    border none
+    border-top 1px solid SOLITUDE
 
 input[type=range]
   -webkit-appearance none
-  margin thumb-height/2 0
-  width track-width
+  margin 20px/2 0
+  width 100%
 
   &:focus
     outline: none
 
   &::-webkit-slider-runnable-track
-    track()
+  // &::-moz-range-track
+    width 100%
+    height 2px
+    cursor pointer
+    animate 0.2s
+    background SOLITUDE
 
   &::-webkit-slider-thumb
-    thumb()
-    -webkit-appearance: none
-    margin-top: ((track-border-width * 2 + track-height) / 2) - (thumb-height / 2)
+  // &::-moz-range-thumb
+    height 20px
+    width 20px
+    border-radius 100%
+    cursor pointer
+    position  relative
+    background-image url('img/track-dot.svg')
+    background-color white
+    background-repeat no-repeat
+    background-position center center
+    box-shadow 0 1px 5px SOLITUDE, 0 0 0 1px rgba(black,.1)
+    margin-top -9px
+    -webkit-appearance none
 
   &:focus::-webkit-slider-runnable-track
-    background: lighten(track-color, contrast)
-
-  &::-moz-range-track
-    track()
-  &::-moz-range-thumb
-    thumb()
+    background: lighten(SOLITUDE, 5%)

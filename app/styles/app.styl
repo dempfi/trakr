@@ -1,7 +1,25 @@
-.-screen
-  absolute left top 40px right
-  bottom 0
+@require 'constants'
 
-.dev-menu
-  fixed left bottom
-  z-index 1
+header
+  fixed left top right
+  min-height  40px
+  box-shadow  0 1px SOLITUDE
+  z-index     99999999999999999
+  background  white
+  .action
+    absolute right 6px top 6px
+    width 27px
+    height 27px
+    border-radius 100%
+    background-color rgba(FLUSH, .1)
+    background-position 50% 50%
+    background-repeat no-repeat
+  .title
+    absolute left 50px top 13px right 50px
+    font-size 14px
+    text-align center
+    line-height 16px
+
+main
+  fixed left top 40px right bottom
+  overflow-y auto

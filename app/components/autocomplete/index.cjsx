@@ -92,7 +92,7 @@ module.exports = React.createClass
       list    : true
       isOpen  : @state.isOpen
 
-    <div className='autocomplete'>
+    <label className='autocomplete'>
       <input
         value       = {@state.value}
         onChange    = {@onChange}
@@ -102,11 +102,13 @@ module.exports = React.createClass
         onClick     = {@show}
         placeholder = {@props.placeholder}
         tabIndex    = '1'
+        required
       />
+      <span className='label'>{@props.label}</span>
       <ul
         className = {classNames(listClasses)}
         onClick   = {@selectItem.bind(@, @state.activeItem)}
       >
         {@state.list?.map (item) => @renderItem(item)}
       </ul>
-    </div>
+    </label>

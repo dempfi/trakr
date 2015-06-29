@@ -1,0 +1,68 @@
+@import '../../styles/constants'
+
+header.task
+  .action
+    background-image: url('img/done.svg')
+
+main.task
+  padding 0 20px
+  .title
+    font-size 16px
+    font-weight 500
+    margin-top 14px
+    line-height 20px
+  .project
+    color SLATE
+    line-height 16px
+    margin-top 3px
+    font-weight 500
+  .worked-earned
+    absolute left bottom right
+    height 54px
+    background white
+    border-top 1px solid SOLITUDE
+    .worked
+      absolute left 80px top 13px
+      color OXFORD
+      .h
+      .m
+      .s
+        width 25px
+        font-size 22px
+        font-weight 300
+        line-height 27px
+        display inline-block
+        position relative
+      .h
+        margin-right 9px
+      .m
+        margin-right 13px
+      .label
+        absolute left 25px top 2px
+        font-size 14px
+        font-weight 300
+        color SLATE
+
+    button
+      absolute left 20px top 12px
+      width 30px
+      height 30px
+      background-color FLUSH
+      background-image url('img/start.svg')
+      background-position 9px 8px
+      background-repeat no-repeat
+      box-shadow inset 0 0 0 1px rgba(black, .1)
+      outline none
+      border none
+      border-radius 100%
+
+    &.active
+      background-color FLUSH
+      border none
+      .worked
+        color white
+        .label
+          color rgba(white,.6)
+      button
+        box-shadow inset 0 0 0 1px white
+        background-image url('img/stop.svg')

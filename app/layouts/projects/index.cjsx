@@ -9,12 +9,13 @@ module.exports = React.createClass
     _.map @state.activity[@props.params.date], (taskId) =>
       <TaskItem key={taskId} task={@state.tasks[taskId]}/>
 
-
   render : ->
-    <div className='-screen projects'>
-      <header>
+    <div>
+      <header className='projects'>
         <Link to='timeline' params={date : moment().format('YYYY-MM-DD')}>Timeline</Link>
       </header>
-      {_.map @state.projects, (project, id) =>
-        <ProjectItem key={id} project={project}/>}
+      <main className='projects'>
+        {_.map @state.projects, (project, id) =>
+          <ProjectItem key={id} project={project}/>}
+      </main>
     </div>

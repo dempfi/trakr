@@ -21,6 +21,9 @@ module.exports = React.createClass
     @setProject ProjectsStore.projects
     @listenTo ProjectsStore, @setProject
 
+  toggle : ->
+    unless @isActive() then @start() else @stop()
+
   start : ->
     TasksActions.addTimeslot @props.params.id
 
@@ -30,16 +33,42 @@ module.exports = React.createClass
   worked : ->
     hhmm _.reduce @state.timeslots, ((c, i) -> i.duration + c), 0
 
+  isActive : ->
+    TasksStore.isActive @state.task.id
+
   render : ->
     worked = @worked()
     <div>
-      {@state.task.title}<br/>
-      <Link to='project' params={id : @state.task.project}>
-        {@state.project.title}
-      </Link>
-      {@state.task.rate}{@state.task.currency}<br/>
-      worked : {worked[0]}h {worked[1]}m {worked[2]}s<br/>
-      earned : {worked[3] / 3600 * @state.task.rate}{@state.task.currency}<br/>
-      <button onClick={@start}>Start</button>
-      <button onClick={@stop}>Stop</button>
+      <header className='task'>
+        <a className='action'></a>
+      </header>
+      <main className='task'>
+        <div className='title'>{@state.task.title}</div>
+        <div className='project'>
+          <Link to='project' params={id : @state.task.project}>
+            {@state.project.title}
+          </Link>
+        </div>
+        {@state.task.rate}{@state.task.currency}<br/>
+
+        <div className={if @isActive() then 'worked-earned active' else 'worked-earned'}>
+          <button onClick={@toggle}/>
+          <div className='worked'>
+            <span className='h'>
+              {worked[0]}
+              <span className='label'>h</span>
+            </span>
+            <span className='m'>
+              {worked[1]}
+              <span className='label'>m</span>
+            </span>
+            <span className='s'>
+              {worked[2]}
+              <span className='label'>s</span>
+            </span>
+          </div>
+        </div>
+
+        earned : {worked[3] / 3600 * @state.task.rate}{@state.task.currency}<br/>
+      </main>
     </div>

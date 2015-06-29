@@ -1,13 +1,16 @@
-TasksStore        = require 'store/tasks'
-TasksActions      = require 'actions/tasks'
-ProjectsActions   = require 'actions/projects'
-ProjectsStore     = require 'store/projects'
-Autocomplete      = require 'components/autocomplete'
-Currencies        = require 'utils/currencies'
-Datepicker        = require 'components/datepicker'
+TasksStore      = require 'store/tasks'
+TasksActions    = require 'actions/tasks'
+ProjectsActions = require 'actions/projects'
+ProjectsStore   = require 'store/projects'
+Autocomplete    = require 'components/autocomplete'
+Currencies      = require 'utils/currencies'
+Datepicker      = require 'components/datepicker'
 
 module.exports = React.createClass
-  mixins: [Reflux.connect(ProjectsStore, 'projects')]
+  mixins: [
+    Reflux.connect(ProjectsStore, 'projects')
+    ReactRouter.Navigation
+  ]
 
   getInitialState : ->
     title      : ''
@@ -29,15 +32,14 @@ module.exports = React.createClass
   onChange : (key, e) ->
     @set key, e.target.value
 
-
   render : ->
-    <div className='-screen new-task'>
-      <header>
-        <p>New task</p>
+    <div>
+      <header className='new-task'>
+        <div className='title'>New task</div>
+        <a className='action' onClick={=> @goBack()}></a>
       </header>
 
-      <div className='main-padding'>
-
+      <main className='new-task'>
         <label className='row'>
           <input
             value    = {@state.title}
@@ -45,19 +47,16 @@ module.exports = React.createClass
             tabIndex = '1'
             required
           />
-          <span className='placeholder'>Task</span>
+          <span className='label'>Task</span>
         </label>
 
-        <label className='row'>
-          <Autocomplete
-            list        = {@state.projects}
-            valueKey    = 'id'
-            titleKey    = 'title'
-            onSelect    = {@set.bind(@, 'project')}
-            required
-          />
-          <span className='placeholder'>Project</span>
-        </label>
+        <Autocomplete
+          list     = {@state.projects}
+          valueKey = 'id'
+          titleKey = 'title'
+          onSelect = {@set.bind(@, 'project')}
+          label    = 'Project'
+        />
 
         <div className='two-inputs'>
 
@@ -68,18 +67,16 @@ module.exports = React.createClass
               tabIndex    = '1'
               required
             />
-            <span className='placeholder'>Hourly rate</span>
+            <span className='label'>Hourly rate</span>
           </label>
 
-          <label className='row'>
-            <Autocomplete
-              list        = {Currencies()}
-              valueKey    = 'currency'
-              titleKey    = 'name'
-              onSelect    = {@set.bind(@, 'currency')}
-            />
-            <span className='placeholder'>Currency</span>
-          </label>
+          <Autocomplete
+            list     = {Currencies()}
+            valueKey = 'currency'
+            titleKey = 'name'
+            onSelect = {@set.bind(@, 'currency')}
+            label    = 'Currency'
+          />
 
         </div>
 
@@ -87,7 +84,7 @@ module.exports = React.createClass
 
           <label className='row'>
             <input required readOnly />
-            <span className='placeholder'>Estimate</span>
+            <span className='label'>Estimate</span>
           </label>
 
           <label className='row'>
@@ -95,27 +92,26 @@ module.exports = React.createClass
               onSelect = {@set.bind(@, 'deadline')}
               selected = {@state.deadline}
             />
-            <span className='placeholder'>Deadline</span>
+            <span className='label'>Deadline</span>
           </label>
 
         </div>
 
-      <label className='row'>
-        <input
-          type     = 'range'
-          value    = {@state.complexity}
-          onChange = {@onChange.bind(@, 'complexity')}
-          min      = {0}
-          step     = {1}
-          max      = {10}
-          tabIndex = '1'
-        />
-        <span className='placeholder'>Complexity</span>
-      </label>
+        <label className='row'>
+          <input
+            type     = 'range'
+            value    = {@state.complexity}
+            onChange = {@onChange.bind(@, 'complexity')}
+            min      = {0}
+            step     = {1}
+            max      = {10}
+            tabIndex = '1'
+          />
+          <span className='label'>Complexity</span>
+        </label>
 
-      </div>
+        <button className='add-task' onClick={@addTask}>add task</button>
 
-      <button className='main-button' onClick={@addTask}>add task</button>
-
+      </main>
     </div>
 
