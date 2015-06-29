@@ -32,6 +32,17 @@ module.exports = React.createClass
   onChange : (key, e) ->
     @set key, e.target.value
 
+  expand : (val) ->
+    @refs.inputs.getDOMNode().style.top = "#{@state.top - val}px"
+
+  collapse : ->
+    @refs.inputs.getDOMNode().style.top = "#{@state.top}px"
+
+  componentDidMount : ->
+    el = @refs.inputs.getDOMNode()
+    {top} = el.getBoundingClientRect()
+    @setState top : top
+
   render : ->
     <div>
       <header className='new-task'>
@@ -39,8 +50,8 @@ module.exports = React.createClass
         <a className='action' onClick={=> @goBack()}></a>
       </header>
 
-      <main className='new-task'>
-        <label className='row'>
+      <main className='new-task' ref='inputs'>
+        <label>
           <input
             value    = {@state.title}
             onChange = {@onChange.bind(@,'title')}
@@ -56,11 +67,13 @@ module.exports = React.createClass
           titleKey = 'title'
           onSelect = {@set.bind(@, 'project')}
           label    = 'Project'
+          onOpen   = {@expand.bind @, 70}
+          onClose  = {@collapse}
         />
 
         <div className='two-inputs'>
 
-          <label className='row'>
+          <label>
             <input
               value       = {@state.rate}
               onChange    = {@onChange.bind(@, 'rate')}
@@ -76,28 +89,30 @@ module.exports = React.createClass
             titleKey = 'name'
             onSelect = {@set.bind(@, 'currency')}
             label    = 'Currency'
+            onOpen   = {@expand.bind @, 130}
+            onClose  = {@collapse}
           />
 
         </div>
 
         <div className='two-inputs'>
 
-          <label className='row'>
+          <label>
             <input required readOnly />
             <span className='label'>Estimate</span>
           </label>
 
-          <label className='row'>
-            <Datepicker
-              onSelect = {@set.bind(@, 'deadline')}
-              selected = {@state.deadline}
-            />
-            <span className='label'>Deadline</span>
-          </label>
+          <Datepicker
+            onSelect = {@set.bind(@, 'deadline')}
+            selected = {@state.deadline}
+            label    = 'Deadline'
+            onOpen   = {@expand.bind @, 190}
+            onClose  = {@collapse}
+          />
 
         </div>
 
-        <label className='row'>
+        <label className='range'>
           <input
             type     = 'range'
             value    = {@state.complexity}

@@ -21,9 +21,13 @@ module.exports = React.createClass
     @props.onSelect moment(date).format 'YYYY-MM-DD'
     @hide()
 
-  hide : -> @setState 'isOpen' : false
+  hide : ->
+    @props.onClose() if @props.onClose
+    @setState 'isOpen' : false
 
-  show : -> @setState 'isOpen' : true
+  show : ->
+    @setState {'isOpen' : true}, =>
+      @props.onOpen() if @props.onOpen
 
   handleBlur : -> @hide() if @state.isHideable
 
@@ -37,28 +41,35 @@ module.exports = React.createClass
 
   render : ->
     title    = moment @state.currentMonth
-    isActive = active : @state.isOpen
+    isActive = isOpen : @state.isOpen
 
-    <div className='datepicker-wrap'>
-      <span
+    <label className={classNames 'datepicker', isActive}>
+      <input
         ref       = 'input'
         className = {classNames 'input', isActive}
         onFocus   = {@show}
-        onClick   = {@show}
         onBlur    = {@handleBlur}
-        children  = {@props.selected}
+        value     = {@props.selected}
         tabIndex  = '1'
+        onChange = {->}
+        required
       />
-
+      <span className='label'>{@props.label}</span>
       <div
-        className   = {classNames '-datepicker', isActive}
+        className   = 'calendar'
         onMouseDown = {@mouseDown}
         onMouseUp   = {@mouseUp}
       >
-        <div className = 'header'>
-          <span onClick = {@setMonth.bind @, -1}>prev</span>
-          <span>{title.format('MMMM YYYY')}</span>
-          <span onClick = {@setMonth.bind @, 1}>next</span>
+        <div className = 'title'>
+          <div
+            onClick   = {@setMonth.bind @, -1}
+            className ='prev'
+          />
+          <span className='month-title'>{title.format('MMMM YYYY')}</span>
+          <div
+            onClick   = {@setMonth.bind @, 1}
+            className ='next'
+          />
         </div>
 
         <Month
@@ -67,5 +78,5 @@ module.exports = React.createClass
           selected = {@props.selected}
         />
       </div>
-    </div>
+    </label>
 

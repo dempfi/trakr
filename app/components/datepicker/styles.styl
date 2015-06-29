@@ -1,25 +1,60 @@
 @import '../../styles/constants'
 
-.datepicker-wrap
+.datepicker
   position relative
-  .-datepicker
-    width 100%
-    text-align center
-    display none
-    &.active
-      display block
-    .header
-      height 100px
+  transition .25s
+  &.isOpen
+    margin-bottom 240px
+    .calendar
+      height 240px
+      visibility visible
+  .calendar
+    overflow hidden
+    visibility hidden
+    absolute left -20px top 60px
+    transition .25s
+    padding 0 20px
+    background #FAFAFA
+    width 320px
+    height 0px
+    border-bottom 1px solid SOLITUDE
+    box-shadow 0 -1px SOLITUDE
+    z-index 0
+    .title
+      height 17px
+      margin-top 17px
+      position relative
+      width 100%
+      text-align center
+      .month-title
+        font-size 14px
+        font-weight 500
+        position relative
+        line-height 17px
+        z-index 2
+      .prev
+      .next
+        z-index 1
+        absolute top
+        width 50%
+        height 100%
+        background-image url('img/dp-prev.svg')
+        background-repeat no-repeat
+        background-position 20px center
+      .next
+        right 0
+        background-image url('img/dp-next.svg')
+        background-position 115px center
 
     ul
       width 100%
+      text-align center
       li
         display inline-block
         height  30px
         width 14.285714%
         line-height 30px
         cursor default
-        border-radius 3px
         &:hover
           background rgba(FLUSH, .05)
           color FLUSH
@@ -29,11 +64,5 @@
           color SLATE
         &.active
           color FLUSH
-          box-shadow inset 0 0 0 1px FLUSH
-          background rgba(FLUSH, .1)
-
-  .input
-    height 20px
-    width 50px
-    background red
-    display block
+          box-shadow inset 0 0 0 2px FLUSH
+          font-weight 500

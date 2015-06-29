@@ -4,8 +4,8 @@ module.exports = React.createClass
 
   getMonth : ->
     {month} = @props
-    fst = moment(month).startOf('month').startOf('week')
-    lst = moment(month).endOf('month').endOf('week')
+    fst = moment(month).startOf('month').startOf('week').subtract 1, 'd'
+    lst = moment(month).endOf('month').endOf('week').add 1, 'd'
     until fst.add(1, 'd').isSame lst, 'd' then ToTuple fst
 
   renderDate : (day) ->

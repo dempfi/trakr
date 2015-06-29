@@ -12,31 +12,42 @@ module.exports = React.createClass
     valueKey    : React.PropTypes.string
     placeholder : React.PropTypes.string
 
-
   getInitialState : ->
     value      : ''
     isOpen     : false
+    isHideable   : true
     activeItem : {}
 
   onChange : (e) ->
+    @show()
     value         = e.target.value
     reg           = new RegExp("^#{value}", 'i')
     filteredList  = _.filter @props.list, (i) =>
       return @props.onFilter(value, i) if @props.onFilter
-      reg.test(i[@props.titleKey]) or
-      reg.test(i[@props.valueKey])
+      reg.test i[@props.titleKey] or
+      reg.test i[@props.valueKey]
 
     @setState
       value : value
       list  : filteredList
 
-  hide : -> @setState 'isOpen' : false
+  hide : ->
+    @props.onClose() if @props.onClose
+    @setState 'isOpen' : false
 
-  show : -> @setState 'isOpen' : true
+  show : ->
+    @setState {'isOpen' : true}, =>
+      @props.onOpen() if @props.onOpen
 
-  handleBlur : ->
-    @selectItem @state.activeItem
-    @hide()
+  handleBlur : -> @hide() if @state.isHideable
+
+  mouseDown : ->
+    @setState 'isHideable' : false
+    React.findDOMNode(@refs.input).focus()
+
+  mouseUp : ->
+    @setState 'isHideable' : true
+    React.findDOMNode(@refs.input).focus()
 
   handleFocus : (e) ->
     @show()
@@ -79,35 +90,36 @@ module.exports = React.createClass
   renderItem : (item) ->
     styles = isActive : @state.activeItem[@props.valueKey] is item[@props.valueKey]
     <li
-      className    = {classNames(styles)}
+      className    = {classNames styles}
       key          = {item[@props.valueKey]}
       onMouseEnter = {@foucusItem.bind(@, item)}
       onMouseLeave = {@foucusItem.bind(@, {})}
+      onClick      = {@selectItem.bind(@, item)}
       children     = {item[@props.titleKey]}
     />
 
-
   render : ->
-    listClasses =
-      list    : true
-      isOpen  : @state.isOpen
+    styles =
+      autocomplete : true
+      isOpen       : @state.isOpen
 
-    <label className='autocomplete'>
+    <label className={classNames styles}>
       <input
+        ref         = 'input'
         value       = {@state.value}
         onChange    = {@onChange}
         onKeyDown   = {@handleKeyDown}
         onFocus     = {@handleFocus}
         onBlur      = {@handleBlur}
-        onClick     = {@show}
         placeholder = {@props.placeholder}
         tabIndex    = '1'
         required
       />
       <span className='label'>{@props.label}</span>
       <ul
-        className = {classNames(listClasses)}
-        onClick   = {@selectItem.bind(@, @state.activeItem)}
+        className   = 'options'
+        onMouseDown = {@mouseDown}
+        onMouseUp   = {@mouseUp}
       >
         {@state.list?.map (item) => @renderItem(item)}
       </ul>
