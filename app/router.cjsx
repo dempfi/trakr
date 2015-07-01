@@ -27,3 +27,5 @@ render = ->
     React.render <Trakr/>, document.body
 
 window.addEventListener 'DOMContentLoaded', render
+
+# <Redirect from='/' to='new-task'/>

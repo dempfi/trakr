@@ -42,6 +42,7 @@ module.exports = React.createClass
   render : ->
     title    = moment @state.currentMonth
     isActive = isOpen : @state.isOpen
+    date     = if @props.selected then moment(@props.selected).format('MMMM DD') else ''
 
     <label className={classNames 'datepicker', isActive}>
       <input
@@ -49,7 +50,7 @@ module.exports = React.createClass
         className = {classNames 'input', isActive}
         onFocus   = {@show}
         onBlur    = {@handleBlur}
-        value     = {@props.selected}
+        value     = {date}
         tabIndex  = '1'
         onChange = {->}
         required
@@ -70,6 +71,10 @@ module.exports = React.createClass
             onClick   = {@setMonth.bind @, 1}
             className ='next'
           />
+        </div>
+
+        <div className='weekdays'>
+          {_.map moment.weekdaysMin(), (i) -> <span>{i}</span>}
         </div>
 
         <Month

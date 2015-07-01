@@ -1,5 +1,9 @@
 @import '../../styles/constants'
 
+header.new-task
+  .action
+    background-image: url('img/close.svg')
+
 main.new-task
   padding 10px 20px
   transition .25s
@@ -54,7 +58,7 @@ main.new-task
           left 20px
     .autocomplete .options
     .datepicker .calendar
-      left -160px
+      left -(WIDTH / 2)
 
   .add-task
     margin-top 26px

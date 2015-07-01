@@ -16,4 +16,4 @@ exports.config =
     templates:
       joinTo: 'app.js'
   paths:
-    public: 'osx_container/public/'
+    public: 'osx_container/public'

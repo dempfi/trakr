@@ -75,9 +75,9 @@ module.exports = React.createClass
 
           <label>
             <input
-              value       = {@state.rate}
-              onChange    = {@onChange.bind(@, 'rate')}
-              tabIndex    = '1'
+              value    = {@state.rate}
+              onChange = {@onChange.bind(@, 'rate')}
+              tabIndex = '1'
               required
             />
             <span className='label'>Hourly rate</span>

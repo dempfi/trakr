@@ -20,16 +20,15 @@ module.exports = React.createClass
 
   onChange : (e) ->
     @show()
-    value         = e.target.value
-    reg           = new RegExp("^#{value}", 'i')
-    filteredList  = _.filter @props.list, (i) =>
-      return @props.onFilter(value, i) if @props.onFilter
-      reg.test i[@props.titleKey] or
-      reg.test i[@props.valueKey]
+    @filter e.target.value
+    @setState value : e.target.value
 
-    @setState
-      value : value
-      list  : filteredList
+  filter : (value) ->
+    reg = new RegExp("^#{value}", 'i')
+    @setState list : _.filter @props.list, (i) =>
+      return @props.onFilter(value, i) if @props.onFilter
+      reg.test(i[@props.titleKey]) or
+      reg.test(i[@props.valueKey])
 
   hide : ->
     @props.onClose() if @props.onClose
@@ -49,9 +48,8 @@ module.exports = React.createClass
     @setState 'isHideable' : true
     React.findDOMNode(@refs.input).focus()
 
-  handleFocus : (e) ->
-    @show()
-    @onChange e
+  handleFocus : ->
+    @show(); @filter('')
 
   selectItem : (item) ->
     @setState value : item[@props.titleKey]

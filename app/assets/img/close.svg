@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="19px" height="19px" viewBox="0 0 19 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape + cross</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="new-task" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="new-task-datepicker" sketch:type="MSArtboardGroup" transform="translate(-631.000000, -285.000000)" fill="#FF8000">
+            <g id="new-task" sketch:type="MSLayerGroup" transform="translate(340.000000, 135.000000)">
+                <g id="topbar" transform="translate(0.000000, 140.000000)" sketch:type="MSShapeGroup">
+                    <g id="cancel" transform="translate(287.000000, 6.000000)">
+                        <g id="Shape-+-cross" transform="translate(4.000000, 4.000000)">
+                            <path d="M9.5,18 L9.5,18 C14.1944204,18 18,14.1944204 18,9.5 C18,4.80557963 14.1944204,1 9.5,1 C4.80557963,1 1,4.80557963 1,9.5 C1,14.1944204 4.80557963,18 9.5,18 L9.5,18 Z M9.5,19 L9.5,19 C4.25329488,19 0,14.7467051 0,9.5 C0,4.25329488 4.25329488,0 9.5,0 C14.7467051,0 19,4.25329488 19,9.5 C19,14.7467051 14.7467051,19 9.5,19 L9.5,19 Z" id="Shape"></path>
+                            <path d="M9,9 L4,9 L4,10 L9,10 L9,15 L10,15 L10,10 L15,10 L15,9 L10,9 L10,4 L9,4 L9,9 Z" id="cross" transform="translate(9.500000, 9.500000) rotate(-45.000000) translate(-9.500000, -9.500000) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
