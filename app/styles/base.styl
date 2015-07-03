@@ -8,8 +8,10 @@ global-reset()
 html
   box-sizing border-box
   font-size 13px
+  -webkit-font-smoothing subpixel-antialiased
 
 body
+  font-family -webkit-system-font, 'Helvetica Neue'
   font-family 'Helvetica Neue'
   color OXFORD
   overflow hidden
@@ -17,7 +19,7 @@ body
 input
   background transparent
   border none
-
+  -webkit-font-smoothing subpixel-antialiased
 *
 *:before
 *:after
@@ -26,3 +28,8 @@ input
 a
   text-decoration none
   color inherit
+  cursor default
+
+button
+  cursor default
+  -webkit-font-smoothing subpixel-antialiased

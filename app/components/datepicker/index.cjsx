@@ -39,6 +39,9 @@ module.exports = React.createClass
     @setState 'isHideable' : true
     React.findDOMNode(@refs.input).focus()
 
+  handleKeyDown : (e) ->
+    @hide() if e.key is 'Escape'
+
   render : ->
     title    = moment @state.currentMonth
     isActive = isOpen : @state.isOpen
@@ -51,8 +54,9 @@ module.exports = React.createClass
         onFocus   = {@show}
         onBlur    = {@handleBlur}
         value     = {date}
+        onKeyDown = {@handleKeyDown}
         tabIndex  = '1'
-        onChange = {->}
+        onChange  = {->}
         required
       />
       <span className='label'>{@props.label}</span>

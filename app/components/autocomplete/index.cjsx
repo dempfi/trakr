@@ -61,7 +61,7 @@ module.exports = React.createClass
       when 'ArrowDown' then @updateIndex('down')
       when 'ArrowUp'   then @updateIndex('up')
       when 'Enter'     then @selectItem(@state.activeItem)
-      when 'Escape'    then console.log('ESC')
+      when 'Escape'    then @hide()
 
   updateIndex : (direction) ->
     current   = @state.activeItem
@@ -120,5 +120,6 @@ module.exports = React.createClass
         onMouseUp   = {@mouseUp}
       >
         {@state.list?.map (item) => @renderItem(item)}
+        {'not found' if @state.list?.length is 0}
       </ul>
     </label>
