@@ -12,10 +12,14 @@ module.exports = React.createClass
     valueKey    : React.PropTypes.string
     placeholder : React.PropTypes.string
 
+  getDefaultProps :  ->
+    renderItem : (i, key) => i[key]
+    onNotFound : -> 'not found'
+
   getInitialState : ->
     value      : ''
     isOpen     : false
-    isHideable   : true
+    isHideable : true
     activeItem : {}
 
   onChange : (e) ->
@@ -56,11 +60,18 @@ module.exports = React.createClass
     @props.onSelect(item[@props.valueKey], item)
     @hide()
 
+  onReturn : ->
+    item = @state.activeItem
+    if @state.list?.length is 0
+      item = {}
+      item[@props.titleKey] = @state.value
+    @selectItem(item)
+
   handleKeyDown : (e) ->
     switch e.key
       when 'ArrowDown' then @updateIndex('down')
       when 'ArrowUp'   then @updateIndex('up')
-      when 'Enter'     then @selectItem(@state.activeItem)
+      when 'Enter'     then @onReturn()
       when 'Escape'    then @hide()
 
   updateIndex : (direction) ->
@@ -86,14 +97,15 @@ module.exports = React.createClass
     @setState activeItem : i
 
   renderItem : (item) ->
-    styles = isActive : @state.activeItem[@props.valueKey] is item[@props.valueKey]
+    {valueKey, titleKey, renderItem} = @props
+    styles = isActive : @state.activeItem[valueKey] is item[valueKey]
     <li
       className    = {classNames styles}
       key          = {item[@props.valueKey]}
       onMouseEnter = {@foucusItem.bind(@, item)}
       onMouseLeave = {@foucusItem.bind(@, {})}
       onClick      = {@selectItem.bind(@, item)}
-      children     = {item[@props.titleKey]}
+      children     = {renderItem(item, titleKey)}
     />
 
   render : ->
@@ -120,6 +132,6 @@ module.exports = React.createClass
         onMouseUp   = {@mouseUp}
       >
         {@state.list?.map (item) => @renderItem(item)}
-        {'not found' if @state.list?.length is 0}
+        {@props.onNotFound(@state.value) if @state.list?.length is 0}
       </ul>
     </label>

@@ -13,6 +13,35 @@ main.new-task
     box-shadow inset 0 -1px SOLITUDE
     display block
     position relative
+    .project-item
+      position relative
+      .name
+        color SLATE
+        font-weight 400
+        white-space nowrap
+        text-overflow ellipsis
+        max-width 210px
+        overflow hidden
+        display inline-block
+      .symbol
+        absolute right top
+        color SLATE
+        font-weight 500
+    .project-not-found
+      display table
+      font-size 18px
+      font-weight 300
+      color SLATE
+      width 100%
+      padding 0 30px
+      text-align center
+      height 100%
+      > div
+        display table-cell
+        vertical-align middle
+      strong
+        color OXFORD
+        font-weight 500
     input
       width 100%
       height 60px

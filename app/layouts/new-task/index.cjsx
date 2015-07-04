@@ -29,6 +29,11 @@ module.exports = React.createClass
     obj[key] = value
     @setState obj
 
+  setProject : (value, item) ->
+    return @setState project : value if value
+    ProjectsActions.add(item.title).then =>
+      @setState project : ProjectsStore.find(item.title)['id']
+
   onChange : (key, e) ->
     @set key, e.target.value
 
@@ -42,6 +47,25 @@ module.exports = React.createClass
     el = @refs.inputs.getDOMNode()
     {top} = el.getBoundingClientRect()
     @setState top : top
+
+  addProject : (value) ->
+    text =
+    if value
+      <div>
+        Hit return to add <strong>"{value}"</strong> into the list of projects
+      </div>
+    else
+      <div>
+        No projects listed. To add one start typing and hit return
+      </div>
+    <div className='project-not-found'>{text}</div>
+
+  renderCurrencyItem : (item) ->
+    <div className='project-item'>
+      {item.currency}
+      <span className='name'>, {item.name}</span>
+      <span className='symbol'>{item.symbol}</span>
+    </div>
 
   render : ->
     <div>
@@ -62,13 +86,14 @@ module.exports = React.createClass
         </label>
 
         <Autocomplete
-          list     = {@state.projects}
-          valueKey = 'id'
-          titleKey = 'title'
-          onSelect = {@set.bind(@, 'project')}
-          label    = 'Project'
-          onOpen   = {@expand.bind @, 70}
-          onClose  = {@collapse}
+          list       = {@state.projects}
+          valueKey   = 'id'
+          titleKey   = 'title'
+          onSelect   = {@setProject}
+          label      = 'Project'
+          onOpen     = {@expand.bind @, 70}
+          onClose    = {@collapse}
+          onNotFound = {@addProject}
         />
 
         <div className='two-inputs'>
@@ -84,13 +109,14 @@ module.exports = React.createClass
           </label>
 
           <Autocomplete
-            list     = {Currencies()}
-            valueKey = 'currency'
-            titleKey = 'name'
-            onSelect = {@set.bind(@, 'currency')}
-            label    = 'Currency'
-            onOpen   = {@expand.bind @, 130}
-            onClose  = {@collapse}
+            list       = {Currencies()}
+            valueKey   = 'currency'
+            titleKey   = 'name'
+            label      = 'Currency'
+            onClose    = {@collapse}
+            onSelect   = {@set.bind(@, 'currency')}
+            onOpen     = {@expand.bind @, 130}
+            renderItem = {@renderCurrencyItem}
           />
 
         </div>
