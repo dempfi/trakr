@@ -70,8 +70,12 @@ module.exports = React.createClass
   render : ->
     <div>
       <header className='new-task'>
-        <div className='title'>New task</div>
-        <a className='action' onClick={=> @goBack()}></a>
+        <div className='title-row'>
+          <div className='title'>New task</div>
+        </div>
+        <div className='actions-row'>
+          <a className='back' onClick={@goBack}></a>
+        </div>
       </header>
 
       <main className='new-task' ref='inputs'>
@@ -83,6 +87,7 @@ module.exports = React.createClass
             required
           />
           <span className='label'>Task</span>
+          <span className='line'></span>
         </label>
 
         <Autocomplete
@@ -91,7 +96,7 @@ module.exports = React.createClass
           titleKey   = 'title'
           onSelect   = {@setProject}
           label      = 'Project'
-          onOpen     = {@expand.bind @, 70}
+          onOpen     = {@expand.bind @, 65}
           onClose    = {@collapse}
           onNotFound = {@addProject}
         />
@@ -106,6 +111,7 @@ module.exports = React.createClass
               required
             />
             <span className='label'>Hourly rate</span>
+            <span className='line'></span>
           </label>
 
           <Autocomplete
@@ -126,6 +132,7 @@ module.exports = React.createClass
           <label>
             <input required readOnly />
             <span className='label'>Estimate</span>
+            <span className='line'></span>
           </label>
 
           <Datepicker

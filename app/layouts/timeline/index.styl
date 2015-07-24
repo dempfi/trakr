@@ -1,11 +1,20 @@
 @import '../../styles/constants'
 
 header.timeline
-  height 71px
-  box-shadow none
+  height 90px
+  .action
+    background-image url('img/add.svg')
+  .timeline
+    width 17px; height 17px
+    icon('timeline')
+  .projects
+    icon('projects')
+  .archive
+    icon('archive')
+
   .dateribbon-wrap
     absolute left bottom right
-    height 23px
+    height 40px
     overflow-x auto
     overflow-y hidden
     ::-webkit-scrollbar
@@ -15,77 +24,72 @@ header.timeline
       white-space no-wrap
       display inline-block
       position relative
-      height 100%
-      &:before
-        content ''
-        absolute left 20px bottom right
-        height 1px
-        background SOLITUDE
-      a
+      height 19px; top 10px
+      li
         display inline-block
-        padding 0 5px
-        margin-right 10px
-        color SLATE
-        font-size 11px
-        height 100%
-        font-weight 500
+        margin-right 20px
+        color light
+        height 19px
         text-transform uppercase
         text-decoration none
         position relative
+        cursor default
+        .date
+          font-size 13px
+        .weekday
+          font-size 10px
+          font-weight 500
         &:first-child
           padding-left 2px
         &.active
-          color OXFORD
+          color main-color
           &:before
+            absolute left -10px bottom -10px
+            right -10px; height 2px
+            background main-color
             content ''
-            absolute left bottom right
-            background SOLITUDE
-            height 3px
-            background FLUSH
-  .action
-    background-image url('img/add.svg')
 
 main.timeline
   overflow-y auto
-  top 70px
+  top 90px
   .list
     overflow-y auto
     li
       display block
-      height 65px
+      height 70px
       position relative
+      thin-border()
+      &:hover
+        background #FCFCFC
+      &.-active
+        &:before
+          absolute left top
+          background main-color
+          height 100%; width 2px
+          content ''
+        .worked-earned
+          color main-color
       .worked-earned
-        height 100%
-        width 70px
-        float left
+        absolute left top
+        height 100%; width 70px
         position relative
-        color OXFORD
-        &.-active
-          color FLUSH
-          &:before
-            absolute left top
-            width 2px
-            height 100%
-            background FLUSH
-            content ''
+        color dark
         .worked
           absolute left 20px top 15px
           font-weight 500
-          line-height 16px
+          line-height 19px
       a
-        height 100%
-        float left
-        display block
-        border-bottom 1px solid SOLITUDE
-        width 250px
-        position relative
+        absolute left 75px top right
         text-decoration none
+        display block
+        height 100%
         .title
-          absolute left top 15px
-          font-weight 500
-          color OXFORD
+          absolute left top 20px
+          font-weight 600
+          color black
           line-height 16px
+          font-family sec-font
         .info
-          absolute left top 33px
-          color SLATE
-          line-height 15px
+          absolute left top 35px
+          color dark
+          line-height 19px

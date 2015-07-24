@@ -126,6 +126,7 @@ module.exports = React.createClass
         required
       />
       <span className='label'>{@props.label}</span>
+      <span className='line'></span>
       <ul
         className   = 'options'
         onMouseDown = {@mouseDown}

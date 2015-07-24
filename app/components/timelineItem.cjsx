@@ -22,12 +22,12 @@ module.exports = React.createClass
 
   render : ->
     worked = @worked moment @props.date
-    <li>
-      <p className="worked-earned #{'-active' if @isActive()}">
+    <li className={'-active' if @isActive()}>
+      <div className="worked-earned">
         <span className='worked'>
           {Number worked[0]}:{worked[1]}
         </span>
-      </p>
+      </div>
       <Link to='task' params={id : @props.task.id}>
         <span className='title'>{@props.task.title}</span>
         <span className='info'>

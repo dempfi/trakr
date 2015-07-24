@@ -1,0 +1,34 @@
+@import '../../styles/constants'
+
+header.projects
+  .action
+    background-image url('img/add.svg')
+  .timeline
+    width 17px; height 17px
+    icon('timeline')
+  .projects
+    icon('projects')
+  .archive
+    icon('archive')
+
+main.projects
+  overflow-y auto
+  a
+    display block
+    height 70px; width 100%
+    position relative
+    thin-border()
+    &:hover
+      background #FCFCFC
+    .title
+      absolute left 75px top 20px
+      font-family sec-font
+      font-weight 600
+      line-height 16px
+      color black
+    .worked
+      absolute left 20px top 15px
+      line-height 19px
+    .info
+      absolute left 75px top 35px
+      line-height 19px

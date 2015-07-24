@@ -10,6 +10,9 @@ module.exports = React.createClass
     Reflux.connect(ActivityStore, 'activity')
   ]
 
+  getInitialState : ->
+    date : moment().format('YYYY-MM-DD')
+
   renderTasks : (tasks) ->
     _.map tasks, (taskId) =>
       <ListItem
@@ -25,16 +28,31 @@ module.exports = React.createClass
       else "at #{moment(date).format 'MMMM DD'}"
     <div>No activity {date}</div>
 
+  onDateSelected : (date) ->
+    @setState date : date
+
   render : ->
-    date  = @props.params.date
+    date  = @state.date
     tasks = @state.activity[date]
     <div>
       <header className='timeline'>
-        <Link to='projects'>Projects</Link>
-        <div className='dateribbon-wrap'>
-          <Dateribbon dates={_.keys @state.activity}/>
+        <div className='title-row'>
+          <div className='title'>Timeline</div>
+          <Link to='new-task' className='action'></Link>
         </div>
-        <Link to='new-task' className='action'></Link>
+        <div className='actions-row'>
+          <Link to='timeline' className='timeline'></Link>
+          <Link to='projects' className='projects'></Link>
+          <Link to='projects' className='archive'></Link>
+        </div>
+
+        <div className='dateribbon-wrap'>
+          <Dateribbon
+            dates={_.keys @state.activity}
+            onSelect={@onDateSelected}
+            active={date}
+          />
+        </div>
       </header>
       <main className='timeline'>
         <ul className='list'>

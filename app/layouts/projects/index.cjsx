@@ -12,10 +12,18 @@ module.exports = React.createClass
   render : ->
     <div>
       <header className='projects'>
-        <Link to='timeline' params={date : moment().format('YYYY-MM-DD')}>Timeline</Link>
+        <div className='title-row'>
+          <div className='title'>Projects</div>
+          <Link to='new-task' className='action'></Link>
+        </div>
+        <div className='actions-row'>
+          <Link to='timeline' className='timeline'></Link>
+          <Link to='projects' className='projects'></Link>
+          <Link to='projects' className='archive'></Link>
+        </div>
       </header>
       <main className='projects'>
         {_.map @state.projects, (project, id) =>
-          <ProjectItem key={id} project={project}/>}
+          <ProjectItem key={id} {...project}/>}
       </main>
     </div>

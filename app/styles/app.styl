@@ -2,27 +2,49 @@
 
 header
   fixed left top right
-  min-height  40px
-  box-shadow  0 1px SOLITUDE
-  z-index     99999999999999999
-  background  white
-  .action
-    absolute right 6px top 6px
-    width 27px
-    height 27px
-    border-radius 100%
-    background-color rgba(FLUSH, .1)
-    background-position 50% 50%
-    background-repeat no-repeat
-    cursor default
-  .title
-    absolute left 50px top 13px right 50px
-    font-size 14px
+  min-height 55px
+  z-index 99999999999999999
+  background white
+  thin-border()
+  .title-row
+    absolute left top right
+    height 20px
+    color black
+    .title
+      absolute left top right
+      font-size 12px
+      text-align center
+      line-height 20px
+    .action
+      absolute right 7px top 4px
+      width 15px; height 15px
+      background-position 50% 50%
+      background-repeat no-repeat
+      cursor default
+  .actions-row
+    absolute left top 20px right
     text-align center
-    line-height 16px
+    height 30px
+    & > a
+      position relative
+      top 7px
+      background-position 50% 50%
+      background-repeat no-repeat
+      display inline-block
+      height 16px
+      width 16px
+      cursor default
+      margin 0 10px
+    & > a.back
+      absolute left 15px top 9px
+      width 20px; height 14px
+      background-image url('img/back.svg')
+      background-position 50% 50%
+      margin 0
+
 
 main
-  fixed left top 40px right bottom
+  fixed left top 55px right bottom
   overflow-y auto
 
 .dev-menu
@@ -30,7 +52,7 @@ main
   fixed bottom 5px left 5px right 5px
   padding 3px
   background rgba(white,.8)
-  color OXFORD
+  color dark
   font-size 10px
   text-transform uppercase
   font-weight 500

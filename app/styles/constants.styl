@@ -1,9 +1,22 @@
-FLUSH    = #FF8000
-OXFORD   = #3A4459
-SLATE    = #828A99
-SOLITUDE = #EBEDF2
-WHITE    = #fff
-BLACK    = #000
+main-color = #FF8000
+dark       = #3A4A59
+light      = rgba(dark, .6)
+superlight = rgba(dark, .1)
 
-FONT = "Helvetica Neue"
-WIDTH = 320px
+def-font   = "Neue Haas Unica W1G"
+sec-font   = "Gotham"
+WIDTH      = 320px
+
+thin-border(color = superlight)
+  &:after
+    transition .25s
+    absolute left bottom right
+    border-bottom 1px color solid
+    content ""; height 1px
+    transform scaleY(0.5)
+    box-sizing content-box
+
+icon(ico)
+  background-image url('img/' + ico + '.svg')
+  &.active
+    background-image url('img/' + ico + '-active.svg')
