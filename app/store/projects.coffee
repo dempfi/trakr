@@ -21,6 +21,7 @@ module.exports  = Reflux.createStore
 
   onAdd : (title) ->
     id = _.createId()
+    console.log 'add'
     project = tasks : [], id : id, title : title
     @set id, project
     @inform()
@@ -28,7 +29,6 @@ module.exports  = Reflux.createStore
 
   onAddTask : (id, task) ->
     project = @get id
-    console.log id
     project.tasks.push task
     @set id, project
     @inform()

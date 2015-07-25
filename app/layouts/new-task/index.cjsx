@@ -31,8 +31,8 @@ module.exports = React.createClass
 
   setProject : (value, item) ->
     return @setState project : value if value
-    ProjectsActions.add(item.title).then =>
-      @setState project : ProjectsStore.find(item.title)['id']
+    ProjectsActions.add item.title
+    @setState project : item.title
 
   onChange : (key, e) ->
     @set key, e.target.value
@@ -47,6 +47,10 @@ module.exports = React.createClass
     el = @refs.inputs.getDOMNode()
     {top} = el.getBoundingClientRect()
     @setState top : top
+
+  componentDidUpdate : (_, state) ->
+    project = ProjectsStore.find state.project
+    @setState project : project['id'] if project
 
   addProject : (value) ->
     text =
@@ -68,6 +72,7 @@ module.exports = React.createClass
     </div>
 
   render : ->
+    console.log @state.project
     <div>
       <header className='new-task'>
         <div className='title-row'>
