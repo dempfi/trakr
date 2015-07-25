@@ -103,7 +103,7 @@ module.exports = React.createClass
 
         <div className='two-inputs'>
 
-          <label>
+          <label className='left'>
             <input
               value    = {@state.rate}
               onChange = {@onChange.bind(@, 'rate')}
@@ -129,7 +129,7 @@ module.exports = React.createClass
 
         <div className='two-inputs'>
 
-          <label>
+          <label className='left'>
             <input required readOnly />
             <span className='label'>Estimate</span>
             <span className='line'></span>
@@ -139,7 +139,7 @@ module.exports = React.createClass
             onSelect = {@set.bind(@, 'deadline')}
             selected = {@state.deadline}
             label    = 'Deadline'
-            onOpen   = {@expand.bind @, 190}
+            onOpen   = {@expand.bind @, 195}
             onClose  = {@collapse}
           />
 
