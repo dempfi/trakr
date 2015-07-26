@@ -1,10 +1,9 @@
 @import '../../styles/constants'
+input-height = 65px
 
 header.new-task
   .action
     background-image: url('img/close.svg')
-
-input-height = 65px
 
 main.new-task
   transition .25s
@@ -20,7 +19,7 @@ main.new-task
       width 100%; height input-height
       padding 35px 0 14px 20px
       font 600 13px/16px sec-font
-      color black
+      color blackl
       outline none
       &[type='range']
         margin 0
@@ -33,18 +32,18 @@ main.new-task
 
     .label
       absolute left 20px top 21px
-      font-size 16px; font-weight 300
-      transition all 0.2s
+      font 300 16px/19px def-font
+      transition all 0.25s
+      height 19px
       color light
-      height 19px; line-height 19px;
 
     .line
       absolute left top (input-height - 1px) right
-      height 0
       thin-border()
+      height 0
 
     &.range
-      height 80px
+      height 75px
 
   .two-inputs
     white-space nowrap
@@ -61,19 +60,10 @@ main.new-task
       margin-left -50%
 
   .add-task
-    margin-top 26px
-    margin-left -20px
-    width WIDTH
-    height 54px
-    background #FAFAFA
-    color main-color
-    font-size 22px
-    font-weight 300
-    font-family FONT
-    border none
-    border-top 1px solid superlight
-
-
+    width 100%; height 50px
+    background main-color
+    font 600 20px/24px sec-font
+    border none; color white
 
   label
     .project-item

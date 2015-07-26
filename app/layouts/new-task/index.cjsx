@@ -72,7 +72,6 @@ module.exports = React.createClass
     </div>
 
   render : ->
-    console.log @state.project
     <div>
       <header className='new-task'>
         <div className='title-row'>
@@ -80,6 +79,9 @@ module.exports = React.createClass
         </div>
         <div className='actions-row'>
           <a className='back' onClick={@goBack}></a>
+          <div className='title'>
+            {if @state.title then @state.title else 'Fill the rows'}
+          </div>
         </div>
       </header>
 

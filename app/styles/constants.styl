@@ -7,14 +7,14 @@ def-font   = "Neue Haas Unica W1G"
 sec-font   = "Gotham"
 WIDTH      = 320px
 
-thin-border(color = superlight)
+thin-border(color = superlight, dir = 'bottom')
   &:after
-    transition .25s
-    absolute left bottom right
     border-bottom 1px color solid
+    absolute left bottom right
     content ""; height 1px
-    transform scaleY(0.5)
     box-sizing content-box
+    transform scaleY(0.5)
+    transition .25s
 
 icon(ico)
   background-image url('img/' + ico + '.svg')

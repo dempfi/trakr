@@ -9,11 +9,13 @@ module.exports = React.createClass
     Reflux.connectFilter TasksStore, 'tasks', (T) ->
       _.reduce @props.tasks, ((A, i) -> A.concat T[i]), []
     Reflux.connectFilter TimeslotsStore, 'timeslots', (T) ->
-      _.reduce @props.tasks, ((A, i) -> A.concat T[i]), []
+      _.reduce @props.tasks, ((A, i) -> if T[i] then A.concat T[i] else A), []
   ]
 
   worked : ->
-    hhmm _.reduce @state.timeslots, ((acc, i) -> acc + i.duration), 0
+    hhmm _.reduce @state.timeslots, (acc, i) ->
+      if i.duration then acc + i.duration else acc
+    , 0
 
   render : ->
     {tasks} = @state

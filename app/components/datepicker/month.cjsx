@@ -12,7 +12,7 @@ module.exports = React.createClass
     className = 'other-month' if day[1] isnt @props.month[1]
     className = 'active' if moment(day).format('YYYY-MM-DD') is @props.selected
     <li
-      key       = {i}
+      key       = {day[2]}
       className = {className}
       onClick   = {@props.onSelect.bind(null, day)}
     >{day[2]}</li>
@@ -22,4 +22,4 @@ module.exports = React.createClass
 
   render : ->
     monthByWeeks = _.groupBy @getMonth(), (_, i) -> Math.floor(i/7)
-    <div>{_.map monthByWeeks, (w, i) => @renderWeek(w, i)}</div>
+    <div className='month'>{_.map monthByWeeks, (w, i) => @renderWeek(w, i)}</div>

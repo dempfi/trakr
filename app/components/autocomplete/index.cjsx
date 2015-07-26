@@ -89,8 +89,8 @@ module.exports = React.createClass
     return last
 
   indexUp : (cur, last) ->
-    return last     if cur <= 0
-    return cur - 1  if cur <= last
+    return last    if cur <= 0
+    return cur - 1 if cur <= last
     return last
 
   foucusItem : (i) ->
